@@ -10,6 +10,7 @@ public class Agenda
 {
 	private PersonaDAO persona;	
 	
+	
 	public Agenda(DAOAbstractFactory metodo_persistencia)
 	{
 		this.persona = metodo_persistencia.createPersonaDAO();
@@ -18,6 +19,10 @@ public class Agenda
 	public void agregarPersona(PersonaDTO nuevaPersona)
 	{
 		this.persona.insert(nuevaPersona);
+	}
+	public void editarPersona(PersonaDTO persona_editar)
+	{
+		this.persona.update(persona_editar);
 	}
 
 	public void borrarPersona(PersonaDTO persona_a_eliminar) 
@@ -29,5 +34,8 @@ public class Agenda
 	{
 		return this.persona.readAll();		
 	}
+	
+	
+	
 	
 }
