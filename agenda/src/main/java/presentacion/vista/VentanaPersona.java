@@ -177,6 +177,7 @@ public class VentanaPersona extends JFrame
 		txtPiso.setText(persona.getPiso());
 		txtDepto.setText(persona.getDepto());
 		
+		
 	}
 	
 	
