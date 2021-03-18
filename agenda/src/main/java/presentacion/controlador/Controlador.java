@@ -129,6 +129,22 @@ public class Controlador implements ActionListener
 			String date = (year + "-" + mes+ "-" + dia);
 			return date;
 		}
+		
+		
+		public JDateChooser toStringFechaInverso(String fecha) {
+			JDateChooser fechaConformato = new JDateChooser();
+			String String_anio = fecha.substring(0, 4);
+			String String_mes = fecha.substring(5, 7);
+			String String_dia = fecha.substring(8,10);
+			int anio = Integer.parseInt(String_anio);
+			int mes = Integer.parseInt(String_mes);
+			int dia = Integer.parseInt(String_dia);
+			
+			fechaConformato.getCalendar().set(anio, mes, dia);
+			
+			return fechaConformato;
+			
+		}
 
 		private void guardarPersona(ActionEvent p) {
 			String nombre = this.ventanaPersona.getTxtNombre().getText();

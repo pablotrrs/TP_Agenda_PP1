@@ -13,6 +13,7 @@ public class PersonaDTO
 	private String fecha_cumpleaños;
 	
 	
+	
 
 	public PersonaDTO(int idPersona, String nombre, String telefono, String calle, String piso, String altura, String depto,
 			String email, String fecha_cumpleaños) {
