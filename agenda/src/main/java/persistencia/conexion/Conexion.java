@@ -18,11 +18,11 @@ public class Conexion
 			Class.forName("com.mysql.jdbc.Driver"); // quitar si no es necesario
 			this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/grupo_10","grupo_69","tomy20001202");
 			this.connection.setAutoCommit(false);
-			log.info("ConexiÃ³n exitosa");
+			log.info("Conexión exitosa");
 		}
 		catch(Exception e)
 		{
-			log.error("ConexiÃ³n fallida", e);
+			log.error("Conexión fallida", e);
 		}
 	}
 	
