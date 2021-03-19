@@ -1,6 +1,5 @@
 package persistencia.dao.interfaz;
 
-import dto.LocalidadDTO;
 
 public interface DAOAbstractFactory 
 {

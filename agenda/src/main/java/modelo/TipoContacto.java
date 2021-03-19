@@ -13,7 +13,7 @@ public class TipoContacto {
 	}
 
 	public void agregarTipoContacto(TipoContactoDTO nuevoTipoContacto) {
-		this.tipoContacto.insert(nuevoTipoContacto);
+		System.out.println(this.tipoContacto.insert(nuevoTipoContacto));
 	}
 
 	public void borrarTipoContacto(TipoContactoDTO tipoContacto_a_eliminar) {

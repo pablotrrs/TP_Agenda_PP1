@@ -22,11 +22,9 @@ public class DAOSQLFactory implements DAOAbstractFactory {
 	public TipoContactoDAO createTipoContactoDAO() {
 		return new TipoContactoDAOImpl();
 	}
-	
+
 	public LocalidadDAO createLocalidadDAO() {
+	
 		return new LocalidadDAOImpl();
 	}
-
-
-	
 }

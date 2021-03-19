@@ -34,7 +34,7 @@
 			<version>1.7.7</version>
 		</dependency>
 
-		
+
 		<!-- Unit testing is mandatory -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -63,6 +63,13 @@
 			<!--<version>5.1.6</version> -->
 			<!-- USAR LA VERSIÓN 5.1.44 SI USÁS MYSQL8 -->
 			<version>5.1.44</version>
+		</dependency>
+
+		<!-- Tuples -->
+		<dependency>
+			<groupId>org.javatuples</groupId>
+			<artifactId>javatuples</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 	</dependencies>

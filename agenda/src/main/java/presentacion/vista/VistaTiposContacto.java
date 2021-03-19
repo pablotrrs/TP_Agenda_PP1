@@ -67,7 +67,7 @@ public class VistaTiposContacto extends JFrame
 		panel.add(btnAgregar);
 		
 		btnEditar = new JButton("Actualizar");
-		btnEditar.setBounds(208, 56, 89, 23);
+		btnEditar.setBounds(195, 56, 102, 23);
 		panel.add(btnEditar);
 		
 				
@@ -81,7 +81,10 @@ public class VistaTiposContacto extends JFrame
 	
 	public void llenarCamposContacto(TipoContactoDTO tipo) {
 		txtNombre.setText(tipo.getNombre());
-		
+	}
+	
+	public void vaciarCamposContacto() {
+		txtNombre.setText("");
 	}
 
 	public void setBtnEditar(JButton btnEditar) {
