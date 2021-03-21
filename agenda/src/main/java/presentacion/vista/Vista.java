@@ -14,7 +14,11 @@ import javax.swing.table.DefaultTableModel;
 
 import org.javatuples.Pair;
 
+import dto.LocalidadDTO;
+import dto.PaisDTO;
 import dto.PersonaDTO;
+import dto.ProvinciaDTO;
+
 import javax.swing.JButton;
 import persistencia.conexion.Conexion;
 
@@ -29,7 +33,7 @@ public class Vista {
 	private JButton btnABMlocalidades;
 	private DefaultTableModel modelPersonas;
 	private String[] nombreColumnas = { "Nombre y apellido", "Teléfono", "Domicilio", "Email", "Fecha de Cumpleaños",
-			"Tipo de Contacto" };
+			"Tipo de Contacto", "Localidad" };
 
 	public Vista() {
 		super();
@@ -38,17 +42,17 @@ public class Vista {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1193, 334);
+		frame.setBounds(100, 100, 1400, 334);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 0, 1157, 284);
+		panel.setBounds(10, 0, 1364, 284);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
 		JScrollPane spPersonas = new JScrollPane();
-		spPersonas.setBounds(10, 11, 1137, 182);
+		spPersonas.setBounds(10, 11, 1344, 228);
 		panel.add(spPersonas);
 
 		modelPersonas = new DefaultTableModel(null, nombreColumnas);
@@ -62,27 +66,27 @@ public class Vista {
 		spPersonas.setViewportView(tablaPersonas);
 
 		btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(10, 228, 185, 23);
+		btnAgregar.setBounds(10, 250, 185, 23);
 		panel.add(btnAgregar);
 
 		btnEditar = new JButton("Editar");
-		btnEditar.setBounds(205, 228, 186, 23);
+		btnEditar.setBounds(246, 250, 186, 23);
 		panel.add(btnEditar);
 
 		btnBorrar = new JButton("Borrar");
-		btnBorrar.setBounds(401, 228, 179, 23);
+		btnBorrar.setBounds(477, 250, 179, 23);
 		panel.add(btnBorrar);
 
 		btnReporte = new JButton("Reporte");
-		btnReporte.setBounds(590, 228, 179, 23);
+		btnReporte.setBounds(706, 250, 179, 23);
 		panel.add(btnReporte);
 
 		btnABMtiposContacto = new JButton("ABM Tipos de contacto");
-		btnABMtiposContacto.setBounds(779, 228, 179, 23);
+		btnABMtiposContacto.setBounds(951, 250, 179, 23);
 		panel.add(btnABMtiposContacto);
 
 		btnABMlocalidades = new JButton("ABM Localidades");
-		btnABMlocalidades.setBounds(968, 228, 179, 23);
+		btnABMlocalidades.setBounds(1175, 250, 179, 23);
 		panel.add(btnABMlocalidades);
 	}
 
@@ -138,8 +142,9 @@ public class Vista {
 		return nombreColumnas;
 	}
 
-	public void llenarTabla(List<Pair<String, PersonaDTO>> personas2) {
-		System.out.println("****personasByTipoDeContacto EN VISTA: " + personas2);
+	public void llenarTabla(List<Pair<String, PersonaDTO>> personas2, Map<Integer, ProvinciaDTO> provinciasById,
+			Map<Integer, String> tiposDeContactosByIds, Map<Integer, LocalidadDTO> localidadesById,
+			Map<Integer, PaisDTO> paisesById) {
 		this.getModelPersonas().setRowCount(0); // Para vaciar la tabla
 		this.getModelPersonas().setColumnCount(0);
 		this.getModelPersonas().setColumnIdentifiers(this.getNombreColumnas());
@@ -151,9 +156,14 @@ public class Vista {
 					+ persona.getValue1().getPiso() + "   " + persona.getValue1().getDepto();
 			String email = persona.getValue1().getEmail();
 			String fechaCumpleanios = persona.getValue1().getFechaCumpleanios();
-			int localidad = persona.getValue1().getLocalidad();
-			Object[] fila = { nombre, tel, domicilio, email, fechaCumpleanios, persona.getValue0(), localidad };
-			System.out.println("****fila: " + fila);
+
+			LocalidadDTO localidad = localidadesById.get(persona.getValue1().getLocalidad());
+			ProvinciaDTO provincia = provinciasById.get(localidad.getIdProvincia());
+			PaisDTO pais = paisesById.get(provincia.getIdPais());
+
+			String str = localidad.getNombre() + ", " + provincia.getNombre() + ", " + pais.getNombre() + ".";
+			Object[] fila = { nombre, tel, domicilio, email, fechaCumpleanios, persona.getValue0(), str };
+
 			this.getModelPersonas().addRow(fila);
 		}
 	}

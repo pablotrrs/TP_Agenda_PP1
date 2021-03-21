@@ -1,30 +1,21 @@
 package dto;
 
-public class LocalidadDTO {
-	private int idLocalidad, idProvincia;
+public class PaisDTO {
+	private int idPais;
 	private String nombre;
-	
-	public LocalidadDTO(int idLocalidad, int idProvincia, String nombre) {
+
+	public PaisDTO(int idPais, String nombre) {
 		super();
-		this.idLocalidad = idLocalidad;
-		this.idProvincia = idProvincia;
+		this.idPais = idPais;
 		this.nombre = nombre;
 	}
 
-	public int getIdLocalidad() {
-		return idLocalidad;
+	public int getIdPais() {
+		return idPais;
 	}
 
-	public void setIdLocalidad(int idLocalidad) {
-		this.idLocalidad = idLocalidad;
-	}
-
-	public int getIdProvincia() {
-		return idProvincia;
-	}
-
-	public void setIdProvincia(int idProvincia) {
-		this.idProvincia = idProvincia;
+	public void setIdPais(int idLocalidad) {
+		this.idPais = idLocalidad;
 	}
 
 	public String getNombre() {
@@ -44,8 +35,7 @@ public class LocalidadDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + idLocalidad;
-		result = prime * result + idProvincia;
+		result = prime * result + idPais;
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		return result;
 	}
@@ -58,10 +48,8 @@ public class LocalidadDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		LocalidadDTO other = (LocalidadDTO) obj;
-		if (idLocalidad != other.idLocalidad)
-			return false;
-		if (idProvincia != other.idProvincia)
+		PaisDTO other = (PaisDTO) obj;
+		if (idPais != other.idPais)
 			return false;
 		if (nombre == null) {
 			if (other.nombre != null)

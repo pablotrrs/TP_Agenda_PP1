@@ -12,6 +12,7 @@ public interface TipoContactoDAO
 
 	public boolean delete(TipoContactoDTO tipoContacto_a_eliminar);
 	
+	public TipoContactoDTO select(int idTipoContacto);
 	
 	public List<TipoContactoDTO> readAll();
 }
