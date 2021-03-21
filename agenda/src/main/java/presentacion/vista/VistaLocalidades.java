@@ -41,7 +41,12 @@ public class VistaLocalidades {
 		panel.add(spLocalidad);
 
 		modelLocalidades = new DefaultTableModel(null, nombreColumnas);
-		tablaLocalidades = new JTable(modelLocalidades);
+		tablaLocalidades = new JTable(modelLocalidades) {
+			private static final long serialVersionUID = 1L;
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
 		tablaLocalidades.getColumnModel().getColumn(0).setPreferredWidth(103);
 		tablaLocalidades.getColumnModel().getColumn(0).setResizable(false);

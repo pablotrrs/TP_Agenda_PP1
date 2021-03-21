@@ -147,27 +147,27 @@ public class VentanaPersona extends JFrame {
 		fecha_cumpleaños = new JDateChooser();
 		fecha_cumpleaños.setBounds(133, 331, 164, 20);
 		panel.add(fecha_cumpleaños);
-		
+
 		comboBox_pais = new JComboBox<PaisDTO>();
 		comboBox_pais.setBounds(133, 208, 164, 22);
 		valuepais = new DefaultComboBoxModel<PaisDTO>();
 		comboBox_pais.setModel(valuepais);
 		panel.add(comboBox_pais);
-	
+
 		lblProvincia = new JLabel("Provincia");
 		lblProvincia.setBounds(10, 245, 100, 14);
 		panel.add(lblProvincia);
-		
+
 		comboBox_provincia = new JComboBox<ProvinciaDTO>();
 		comboBox_provincia.setBounds(133, 241, 164, 22);
 		valueprov = new DefaultComboBoxModel<ProvinciaDTO>();
 		comboBox_provincia.setModel(valueprov);
 		panel.add(comboBox_provincia);
-		
+
 		lblLocalidad = new JLabel("Localidad");
 		lblLocalidad.setBounds(10, 274, 100, 14);
 		panel.add(lblLocalidad);
-		
+
 		comboBox_localidad = new JComboBox<LocalidadDTO>();
 		comboBox_localidad.setBounds(133, 270, 164, 22);
 		valueloc = new DefaultComboBoxModel<LocalidadDTO>();
@@ -223,8 +223,42 @@ public class VentanaPersona extends JFrame {
 		fecha_cumpleaños.setDate(null);
 	}
 	
+	public void setValorComboBoxPais(int index) {
+		comboBox_pais.setSelectedIndex(index);
+	}
+	
+	public void setValorComboBoxProvincia(int index) {
+		comboBox_provincia.setSelectedIndex(index);
+	}
+	
+	public void setValorComboBoxLocalidad(int index) {
+		comboBox_localidad.setSelectedIndex(index);
+	}
+	
+	public void cerrar() {
+		this.txtNombre.setText(null);
+		this.txtTelefono.setText(null);
+		this.dispose();
+	}
+
 	public void mostrarVentana() {
 		this.setVisible(true);
+	}
+
+	public void cambiarTituloAEditar() {
+		this.setTitle("Editar Persona");
+	}
+
+	public void cambiarTituloAagregar() {
+		this.setTitle("Agregar Persona");
+	}
+
+	public void ActivarButton(JButton btn) {
+		btn.setVisible(true);
+	}
+
+	public void ApagarButton(JButton btn) {
+		btn.setVisible(false);
 	}
 
 	public JTextField getTxtNombre() {
@@ -271,47 +305,29 @@ public class VentanaPersona extends JFrame {
 		return value;
 	}
 
-
-	public void cerrar() {
-		this.txtNombre.setText(null);
-		this.txtTelefono.setText(null);
-		this.dispose();
-	}
-
 	public DefaultComboBoxModel<PaisDTO> getValuepais() {
 		return valuepais;
 	}
-
 
 	public DefaultComboBoxModel<ProvinciaDTO> getValueprov() {
 		return valueprov;
 	}
 
-	
-
 	public DefaultComboBoxModel<LocalidadDTO> getValueloc() {
 		return valueloc;
 	}
 
-	
-
-	public JComboBox<PaisDTO> getComboBox_pais() {
+	public JComboBox<PaisDTO> getComboBoxPais() {
 		return comboBox_pais;
 	}
 
-	
-
-	public JComboBox<ProvinciaDTO> getComboBox_provincia() {
+	public JComboBox<ProvinciaDTO> getComboBoxProvincia() {
 		return comboBox_provincia;
 	}
 
-	
-
-	public JComboBox<LocalidadDTO> getComboBox_localidad() {
+	public JComboBox<LocalidadDTO> getComboBoxLocalidad() {
 		return comboBox_localidad;
 	}
-
-	
 
 	public JButton getBtnEditar() {
 		return btnEditar;

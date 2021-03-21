@@ -3,7 +3,7 @@ package dto;
 public class ProvinciaDTO {
 	private int idProvincia, idPais;
 	private String nombre;
-	
+
 	public ProvinciaDTO(int idProvincia, int idPais, String nombre) {
 		super();
 		this.idProvincia = idProvincia;
@@ -37,7 +37,7 @@ public class ProvinciaDTO {
 
 	@Override
 	public String toString() {
-		return  nombre;
+		return nombre;
 	}
 
 	@Override

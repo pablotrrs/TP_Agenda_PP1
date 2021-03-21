@@ -1,26 +1,24 @@
 package presentacion.vista;
 
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import org.javatuples.Pair;
-
 import dto.LocalidadDTO;
 import dto.PaisDTO;
 import dto.PersonaDTO;
 import dto.ProvinciaDTO;
-
 import javax.swing.JButton;
 import persistencia.conexion.Conexion;
+import java.awt.Dimension;
 
 public class Vista {
 	private JFrame frame;
@@ -42,21 +40,30 @@ public class Vista {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1400, 334);
+		frame.setBounds(100, 100, 1350, 334);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 0, 1364, 284);
+		panel.setBounds(10, 0, 1314, 284);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
 		JScrollPane spPersonas = new JScrollPane();
-		spPersonas.setBounds(10, 11, 1344, 228);
+		spPersonas.setBounds(10, 11, 1294, 228);
 		panel.add(spPersonas);
 
 		modelPersonas = new DefaultTableModel(null, nombreColumnas);
-		tablaPersonas = new JTable(modelPersonas);
+		tablaPersonas = new JTable(modelPersonas) {
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		;
 
 		tablaPersonas.getColumnModel().getColumn(0).setPreferredWidth(103);
 		tablaPersonas.getColumnModel().getColumn(0).setResizable(false);
@@ -70,23 +77,23 @@ public class Vista {
 		panel.add(btnAgregar);
 
 		btnEditar = new JButton("Editar");
-		btnEditar.setBounds(246, 250, 186, 23);
+		btnEditar.setBounds(237, 250, 186, 23);
 		panel.add(btnEditar);
 
 		btnBorrar = new JButton("Borrar");
-		btnBorrar.setBounds(477, 250, 179, 23);
+		btnBorrar.setBounds(462, 250, 179, 23);
 		panel.add(btnBorrar);
 
 		btnReporte = new JButton("Reporte");
-		btnReporte.setBounds(706, 250, 179, 23);
+		btnReporte.setBounds(687, 250, 179, 23);
 		panel.add(btnReporte);
 
 		btnABMtiposContacto = new JButton("ABM Tipos de contacto");
-		btnABMtiposContacto.setBounds(951, 250, 179, 23);
+		btnABMtiposContacto.setBounds(906, 250, 179, 23);
 		panel.add(btnABMtiposContacto);
 
 		btnABMlocalidades = new JButton("ABM Localidades");
-		btnABMlocalidades.setBounds(1175, 250, 179, 23);
+		btnABMlocalidades.setBounds(1125, 250, 179, 23);
 		panel.add(btnABMlocalidades);
 	}
 
@@ -157,7 +164,7 @@ public class Vista {
 			String email = persona.getValue1().getEmail();
 			String fechaCumpleanios = persona.getValue1().getFechaCumpleanios();
 
-			LocalidadDTO localidad = localidadesById.get(persona.getValue1().getLocalidad());
+			LocalidadDTO localidad = localidadesById.get(persona.getValue1().getIdLocalidad());
 			ProvinciaDTO provincia = provinciasById.get(localidad.getIdProvincia());
 			PaisDTO pais = paisesById.get(provincia.getIdPais());
 

@@ -8,31 +8,31 @@ import persistencia.dao.interfaz.LocalidadDAO;
 public class Localidad {
 	private LocalidadDAO localidad;
 
-	public Localidad(DAOAbstractFactory metodo_persistencia) {
-		this.localidad = metodo_persistencia.createLocalidadDAO();
+	public Localidad(DAOAbstractFactory metodoPersistencia) {
+		this.localidad = metodoPersistencia.createLocalidadDAO();
 	}
 
-	public int agregarLocalidad(LocalidadDTO localidad) {
-		return this.localidad.insert(localidad);
+	public int agregarLocalidad(LocalidadDTO nuevaLocalidad) {
+		return this.localidad.insert(nuevaLocalidad);
 	}
 
-	public void borrarLocalidad(LocalidadDTO localidad_a_eliminar) {
-		this.localidad.delete(localidad_a_eliminar);
+	public void borrarLocalidad(LocalidadDTO localidad) {
+		this.localidad.delete(localidad);
 	}
 
-	public void editarLocalidad(LocalidadDTO localidad_a_editar) {
-		this.localidad.update(localidad_a_editar);
+	public void editarLocalidad(LocalidadDTO localidad) {
+		this.localidad.update(localidad);
+	}
+	
+	public List<LocalidadDTO> obtenerTodasLocalidades() {
+		return this.localidad.readAll();
 	}
 
 	public LocalidadDTO obtenerLocalidad(int localidad) {
 		return this.localidad.select(localidad);
 	}
 
-	public List<LocalidadDTO> obtenerTodasLocalidades() {
-		return this.localidad.readAll();
-	}
-
-	public List<LocalidadDTO> dameLocalidadesDeLaProvincia(String idProvincia) {
+	public List<LocalidadDTO> obtenerLocalidadesDeLaProvincia(String idProvincia) {
 		return this.localidad.dameLocalidadesDeLaProvincia(idProvincia);
 	}
 }

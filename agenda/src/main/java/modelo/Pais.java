@@ -8,27 +8,31 @@ import persistencia.dao.interfaz.PaisDAO;
 public class Pais {
 	private PaisDAO pais;
 
-	public Pais(DAOAbstractFactory metodo_persistencia) {
-		this.pais = metodo_persistencia.createPaisDAO();
+	public Pais(DAOAbstractFactory metodoPersistencia) {
+		this.pais = metodoPersistencia.createPaisDAO();
 	}
 
-	public int agregarPais(PaisDTO provincia) {
-		return this.pais.insert(provincia);
+	public int agregarPais(PaisDTO nuevoPais) {
+		return this.pais.insert(nuevoPais);
 	}
 
-	public void borrarPais(PaisDTO provincia_a_eliminar) {
-		this.pais.delete(provincia_a_eliminar);
+	public void borrarPais(PaisDTO pais) {
+		this.pais.delete(pais);
 	}
 
-	public void editarPais(PaisDTO provincia_a_editar) {
-		this.pais.update(provincia_a_editar);
+	public void editarPais(PaisDTO pais) {
+		this.pais.update(pais);
 	}
-
-	public List<PaisDTO> obtenerPais(String provincias) {
-		return this.pais.select(provincias);
-	}
-
+	
 	public List<PaisDTO> obtenerTodosPaises() {
 		return this.pais.readAll();
+	}
+
+	public List<PaisDTO> obtenerPais(String paises) {
+		return this.pais.selectPaises(paises);
+	}
+	
+	public List<PaisDTO> selectPais(String pais) {
+		return this.pais.selectPais(pais);
 	}
 }

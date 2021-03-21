@@ -8,27 +8,27 @@ import persistencia.dao.interfaz.TipoContactoDAO;
 public class TipoContacto {
 	private TipoContactoDAO tipoContacto;
 
-	public TipoContacto(DAOAbstractFactory metodo_persistencia) {
-		this.tipoContacto = metodo_persistencia.createTipoContactoDAO();
+	public TipoContacto(DAOAbstractFactory metodoPersistencia) {
+		this.tipoContacto = metodoPersistencia.createTipoContactoDAO();
 	}
 
 	public void agregarTipoContacto(TipoContactoDTO nuevoTipoContacto) {
-		System.out.println(this.tipoContacto.insert(nuevoTipoContacto));
+		this.tipoContacto.insert(nuevoTipoContacto);
 	}
 
-	public void borrarTipoContacto(TipoContactoDTO tipoContacto_a_eliminar) {
-		this.tipoContacto.delete(tipoContacto_a_eliminar);
+	public void borrarTipoContacto(TipoContactoDTO tipoContacto) {
+		this.tipoContacto.delete(tipoContacto);
 	}
 
-	public void editarTipoContacto(TipoContactoDTO tipoContacto_a_editar) {
-		this.tipoContacto.update(tipoContacto_a_editar);
+	public void editarTipoContacto(TipoContactoDTO tipoContacto) {
+		this.tipoContacto.update(tipoContacto);
 	}
 
 	public TipoContactoDTO obtenerTipoContacto(int idTipoContacto) {
 		return this.tipoContacto.select(idTipoContacto);
 	}
 
-	public List<TipoContactoDTO> obtenerTodosTiposContactos() {
+	public List<TipoContactoDTO> obtenerTodosLosTiposContactos() {
 		return this.tipoContacto.readAll();
 	}
 }

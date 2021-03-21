@@ -1,12 +1,12 @@
 package dto;
 
 public class PersonaDTO {
-	
-	private int idPersona, tipoContacto, localidad;
+
+	private int idPersona, idTipoContacto, idLocalidad;
 	private String nombre, telefono, calle, piso, altura, depto, email, fechaCumpleanios;
 
 	public PersonaDTO(int idPersona, String nombre, String telefono, String calle, String piso, String altura,
-			String depto, String email, String fechaCumpleanios, int tipoContacto, int localidad) {
+			String depto, String email, String fechaCumpleanios, int idTipoContacto, int idLocalidad) {
 		super();
 		this.idPersona = idPersona;
 		this.nombre = nombre;
@@ -17,16 +17,16 @@ public class PersonaDTO {
 		this.depto = depto;
 		this.email = email;
 		this.fechaCumpleanios = fechaCumpleanios;
-		this.tipoContacto = tipoContacto;
-		this.localidad = localidad;
+		this.idTipoContacto = idTipoContacto;
+		this.idLocalidad = idLocalidad;
 	}
 
-	public int getLocalidad() {
-		return localidad;
+	public int getIdLocalidad() {
+		return idLocalidad;
 	}
 
-	public void setLocalidad(int localidad) {
-		this.localidad = localidad;
+	public void setIdLocalidad(int idLocalidad) {
+		this.idLocalidad = idLocalidad;
 	}
 
 	public int getIdPersona() {
@@ -97,21 +97,21 @@ public class PersonaDTO {
 		return fechaCumpleanios;
 	}
 
-	public void setFechaCumpleanios(String fecha_cumpleanios) {
-		this.fechaCumpleanios = fecha_cumpleanios;
+	public void setFechaCumpleanios(String fechaCumpleanios) {
+		this.fechaCumpleanios = fechaCumpleanios;
 	}
 
-	public int getTipoContacto() {
-		return tipoContacto;
+	public int getIdTipoContacto() {
+		return idTipoContacto;
 	}
 
-	public void setTipoContacto(int tipoContacto) {
-		this.tipoContacto = tipoContacto;
+	public void setIdTipoContacto(int idTipoContacto) {
+		this.idTipoContacto = idTipoContacto;
 	}
 
 	@Override
 	public String toString() {
-		return "PersonaDTO [idPersona=" + idPersona + ", tipoContacto=" + tipoContacto + ", localidad=" + localidad
+		return "PersonaDTO [idPersona=" + idPersona + ", tipoContacto=" + idTipoContacto + ", localidad=" + idLocalidad
 				+ ", nombre=" + nombre + ", telefono=" + telefono + ", calle=" + calle + ", piso=" + piso + ", altura="
 				+ altura + ", depto=" + depto + ", email=" + email + ", fechaCumpleanios=" + fechaCumpleanios + "]";
 	}
