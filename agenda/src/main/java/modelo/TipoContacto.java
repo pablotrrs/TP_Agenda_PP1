@@ -19,11 +19,16 @@ public class TipoContacto {
 	public void borrarTipoContacto(TipoContactoDTO tipoContacto_a_eliminar) {
 		this.tipoContacto.delete(tipoContacto_a_eliminar);
 	}
+
 	public void editarTipoContacto(TipoContactoDTO tipoContacto_a_editar) {
 		this.tipoContacto.update(tipoContacto_a_editar);
 	}
 
-	public List<TipoContactoDTO> obtenerTipoContacto() {
+	public TipoContactoDTO obtenerTipoContacto(int idTipoContacto) {
+		return this.tipoContacto.select(idTipoContacto);
+	}
+
+	public List<TipoContactoDTO> obtenerTodosTiposContactos() {
 		return this.tipoContacto.readAll();
 	}
 }

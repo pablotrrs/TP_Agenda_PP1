@@ -8,15 +8,12 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import java.awt.Color;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
-
 import dto.LocalidadDTO;
+import dto.PaisDTO;
 import dto.PersonaDTO;
+import dto.ProvinciaDTO;
 import dto.TipoContactoDTO;
 import javax.swing.DefaultComboBoxModel;
 
@@ -31,10 +28,15 @@ public class VentanaPersona extends JFrame {
 	private static VentanaPersona INSTANCE;
 	private JTextField txtEmail;
 	private JComboBox<TipoContactoDTO> comboBox_tipo_contacto;
-	private DefaultComboBoxModel<TipoContactoDTO> value;	
+	private DefaultComboBoxModel<TipoContactoDTO> value;
+	private DefaultComboBoxModel<PaisDTO> valuepais;
+	private DefaultComboBoxModel<ProvinciaDTO> valueprov;
+	private DefaultComboBoxModel<LocalidadDTO> valueloc;
+	private JComboBox<PaisDTO> comboBox_pais;
+	private JLabel lblProvincia;
+	private JComboBox<ProvinciaDTO> comboBox_provincia;
+	private JLabel lblLocalidad;
 	private JComboBox<LocalidadDTO> comboBox_localidad;
-	private DefaultComboBoxModel<LocalidadDTO> valor;
-	
 
 	public static VentanaPersona getInstance() {
 		if (INSTANCE == null) {
@@ -49,14 +51,14 @@ public class VentanaPersona extends JFrame {
 		setBackground(Color.WHITE);
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 355, 447);
+		setBounds(100, 100, 355, 485);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 319, 348);
+		panel.setBounds(10, 11, 319, 396);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -116,55 +118,74 @@ public class VentanaPersona extends JFrame {
 		panel.add(lblPiso);
 
 		JLabel lblEmail = new JLabel("Email");
-		lblEmail.setBounds(10, 238, 46, 14);
+		lblEmail.setBounds(10, 303, 46, 14);
 		panel.add(lblEmail);
 
 		JLabel lblFecha_cumpleaños = new JLabel("Fecha de cumplea\u00F1os");
-		lblFecha_cumpleaños.setBounds(10, 266, 113, 14);
+		lblFecha_cumpleaños.setBounds(10, 331, 113, 14);
 		panel.add(lblFecha_cumpleaños);
 
-		JLabel lblLocalidad = new JLabel("Localidad");
-		lblLocalidad.setBounds(10, 212, 46, 14);
-		panel.add(lblLocalidad);
+		JLabel lblPais = new JLabel("Pa\u00EDs");
+		lblPais.setBounds(10, 212, 100, 14);
+		panel.add(lblPais);
 
 		txtEmail = new JTextField();
-		txtEmail.setBounds(133, 234, 164, 20);
+		txtEmail.setBounds(133, 299, 164, 20);
 		panel.add(txtEmail);
 		txtEmail.setColumns(10);
 
 		JLabel lblTipo_contacto = new JLabel("Tipo de contacto");
-		lblTipo_contacto.setBounds(10, 291, 113, 14);
+		lblTipo_contacto.setBounds(10, 356, 113, 14);
 		panel.add(lblTipo_contacto);
 
 		comboBox_tipo_contacto = new JComboBox<TipoContactoDTO>();
-		comboBox_tipo_contacto.setBounds(133, 294, 164, 22);
+		comboBox_tipo_contacto.setBounds(133, 359, 164, 22);
 		value = new DefaultComboBoxModel<TipoContactoDTO>();
 		comboBox_tipo_contacto.setModel(value);
 		panel.add(comboBox_tipo_contacto);
 
 		fecha_cumpleaños = new JDateChooser();
-		fecha_cumpleaños.setBounds(133, 266, 164, 20);
+		fecha_cumpleaños.setBounds(133, 331, 164, 20);
 		panel.add(fecha_cumpleaños);
 		
+		comboBox_pais = new JComboBox<PaisDTO>();
+		comboBox_pais.setBounds(133, 208, 164, 22);
+		valuepais = new DefaultComboBoxModel<PaisDTO>();
+		comboBox_pais.setModel(valuepais);
+		panel.add(comboBox_pais);
+	
+		lblProvincia = new JLabel("Provincia");
+		lblProvincia.setBounds(10, 245, 100, 14);
+		panel.add(lblProvincia);
+		
+		comboBox_provincia = new JComboBox<ProvinciaDTO>();
+		comboBox_provincia.setBounds(133, 241, 164, 22);
+		valueprov = new DefaultComboBoxModel<ProvinciaDTO>();
+		comboBox_provincia.setModel(valueprov);
+		panel.add(comboBox_provincia);
+		
+		lblLocalidad = new JLabel("Localidad");
+		lblLocalidad.setBounds(10, 274, 100, 14);
+		panel.add(lblLocalidad);
+		
 		comboBox_localidad = new JComboBox<LocalidadDTO>();
-		comboBox_localidad.setBounds(133, 208, 164, 22);
-		valor = new DefaultComboBoxModel<LocalidadDTO>();
-		comboBox_localidad.setModel(valor);
+		comboBox_localidad.setBounds(133, 270, 164, 22);
+		valueloc = new DefaultComboBoxModel<LocalidadDTO>();
+		comboBox_localidad.setModel(valueloc);
 		panel.add(comboBox_localidad);
 
 		btnAgregarPersona = new JButton("Agregar");
-		btnAgregarPersona.setBounds(162, 370, 89, 23);
+		btnAgregarPersona.setBounds(217, 418, 89, 23);
 		contentPane.add(btnAgregarPersona);
-		btnAgregarPersona.setBounds(162, 370, 89, 23);
 
 		btnEditar = new JButton("Actualizar");
-		btnEditar.setBounds(130, 370, 110, 23);
+		btnEditar.setBounds(196, 418, 110, 23);
 		contentPane.add(btnEditar);
 
 		this.setVisible(false);
 	}
 
-	public void llenarCampos(PersonaDTO persona) {
+	public void llenarCampos(PersonaDTO persona, TipoContactoDTO tipoContactoDTO) {
 		txtNombre.setText(persona.getNombre());
 		txtTelefono.setText(persona.getTelefono());
 		txtEmail.setText(persona.getEmail());
@@ -173,22 +194,19 @@ public class VentanaPersona extends JFrame {
 		txtPiso.setText(persona.getPiso());
 		txtDepto.setText(persona.getDepto());
 		toStringFechaInverso(fecha_cumpleaños, persona.getFechaCumpleanios());
-		comboBox_tipo_contacto.setSelectedItem(persona.getTipoContacto());
+		comboBox_tipo_contacto.setSelectedItem(tipoContactoDTO);
 	}
-	
-	
-
 
 	public void toStringFechaInverso(JDateChooser fecha_cumpleaños, String fecha) {
 		String String_anio = fecha.substring(0, 4);
 		String String_mes = fecha.substring(5, 7);
-		String String_dia = fecha.substring(8,10);
+		String String_dia = fecha.substring(8, 10);
 		int anio = Integer.parseInt(String_anio);
 		int mes = Integer.parseInt(String_mes) - 1;
 		int dia = Integer.parseInt(String_dia);
 		fecha_cumpleaños.setCalendar(new GregorianCalendar(anio, mes, dia));
 	}
-	
+
 	public void vaciarCampos() {
 		txtNombre.setText("");
 		txtTelefono.setText("");
@@ -198,9 +216,13 @@ public class VentanaPersona extends JFrame {
 		txtPiso.setText("");
 		txtDepto.setText("");
 		comboBox_tipo_contacto.setSelectedIndex(-1);
+		comboBox_pais.setSelectedIndex(-1);
+		comboBox_provincia.setSelectedIndex(-1);
+		comboBox_localidad.setSelectedIndex(-1);
+
 		fecha_cumpleaños.setDate(null);
 	}
-
+	
 	public void mostrarVentana() {
 		this.setVisible(true);
 	}
@@ -237,7 +259,7 @@ public class VentanaPersona extends JFrame {
 		return btnAgregarPersona;
 	}
 
-	public JDateChooser getTxtFecha_cumpleaños() {
+	public JDateChooser getTxtFechaCumpleanios() {
 		return fecha_cumpleaños;
 	}
 
@@ -248,9 +270,7 @@ public class VentanaPersona extends JFrame {
 	public DefaultComboBoxModel<TipoContactoDTO> getDefaultComboBoxModelValue() {
 		return value;
 	}
-	public DefaultComboBoxModel<LocalidadDTO> getDefaultComboBoxModelValor(){
-		return valor;
-	}
+
 
 	public void cerrar() {
 		this.txtNombre.setText(null);
@@ -258,11 +278,42 @@ public class VentanaPersona extends JFrame {
 		this.dispose();
 	}
 
-	public JButton getBtnEditar() {
-		return btnEditar;
+	public DefaultComboBoxModel<PaisDTO> getValuepais() {
+		return valuepais;
 	}
 
-	public JComboBox<LocalidadDTO> getComboBoxLocalidades() {
+
+	public DefaultComboBoxModel<ProvinciaDTO> getValueprov() {
+		return valueprov;
+	}
+
+	
+
+	public DefaultComboBoxModel<LocalidadDTO> getValueloc() {
+		return valueloc;
+	}
+
+	
+
+	public JComboBox<PaisDTO> getComboBox_pais() {
+		return comboBox_pais;
+	}
+
+	
+
+	public JComboBox<ProvinciaDTO> getComboBox_provincia() {
+		return comboBox_provincia;
+	}
+
+	
+
+	public JComboBox<LocalidadDTO> getComboBox_localidad() {
 		return comboBox_localidad;
+	}
+
+	
+
+	public JButton getBtnEditar() {
+		return btnEditar;
 	}
 }

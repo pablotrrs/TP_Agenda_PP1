@@ -6,30 +6,38 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import dto.TipoContactoDTO;
+import com.mysql.jdbc.Statement;
+import dto.PaisDTO;
 import persistencia.conexion.Conexion;
-import persistencia.dao.interfaz.TipoContactoDAO;
+import persistencia.dao.interfaz.PaisDAO;
 
-public class TipoContactoDAOImpl implements TipoContactoDAO {
-	private static final String insert = "INSERT INTO tiposDeContactos (nombre) VALUES(?)";
-	private static final String update = "UPDATE tiposDeContactos SET nombre = ? WHERE idTipoContacto = ?";
-	private static final String delete = "DELETE FROM tiposDeContactos WHERE nombre = ?";
-	private static final String readall = "SELECT * FROM tiposDeContactos";
-	private static final String select = "SELECT * FROM tiposDeContactos WHERE idTipoContacto = ?";
+public class PaisDAOSQL implements PaisDAO {
+	private static final String insert = "INSERT INTO paises (idPais, nombre) VALUES(?, ?)";
+	private static final String update = "UPDATE paises SET nombre = ? WHERE idPais = ?";
+	private static final String delete = "DELETE FROM paises WHERE idPais = ?";
+	private static final String readall = "SELECT * FROM paises";
 	private static final Conexion conexion = Conexion.getConexion();
 
-	public boolean insert(TipoContactoDTO tipoContacto) {
+	@Override
+	public int insert(PaisDTO pais_a_editar) {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
-		boolean isInsertExitoso = false;
+		int generatedKey = 0;
 		try {
-			statement = conexion.prepareStatement(insert);
-			statement.setString(1, tipoContacto.getNombre());
+			statement = conexion.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+			statement.setInt(1, pais_a_editar.getIdPais());
+			statement.setString(2, pais_a_editar.getNombre());
 
-			if (statement.executeUpdate() > 0) {
+			if (!statement.execute()) {
 				conexion.commit();
-				isInsertExitoso = true;
 			}
+
+			ResultSet rs = statement.getGeneratedKeys();
+			generatedKey = 0;
+			if (rs.next()) {
+				generatedKey = rs.getInt(1);
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
@@ -39,20 +47,20 @@ public class TipoContactoDAOImpl implements TipoContactoDAO {
 			}
 		}
 
-		return isInsertExitoso;
+		return generatedKey;
 	}
 
-	public boolean update(TipoContactoDTO tipoContacto_a_editar) {
+	@Override
+	public boolean update(PaisDTO pais) {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isUpdateExitoso = false;
 		try {
 			statement = conexion.prepareStatement(update);
 
-			statement.setString(1, tipoContacto_a_editar.getNombre());
-			statement.setInt(2, tipoContacto_a_editar.getIdTipoContacto());
+			statement.setString(1, pais.getNombre());
+			statement.setInt(2, pais.getIdPais());
 
-			System.out.println(statement);
 			if (statement.executeUpdate() > 0) {
 				conexion.commit();
 				isUpdateExitoso = true;
@@ -69,13 +77,15 @@ public class TipoContactoDAOImpl implements TipoContactoDAO {
 		return isUpdateExitoso;
 	}
 
-	public boolean delete(TipoContactoDTO tipoContacto_a_eliminar) {
+	@Override
+	public boolean delete(PaisDTO pais_a_eliminar) {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isdeleteExitoso = false;
 		try {
 			statement = conexion.prepareStatement(delete);
-			statement.setString(1, tipoContacto_a_eliminar.getNombre());
+			statement.setInt(1, pais_a_eliminar.getIdPais());
+
 			if (statement.executeUpdate() > 0) {
 				conexion.commit();
 				isdeleteExitoso = true;
@@ -86,42 +96,49 @@ public class TipoContactoDAOImpl implements TipoContactoDAO {
 		return isdeleteExitoso;
 	}
 
-	public TipoContactoDTO select(int idTipoContacto) {
+	@Override
+	public List<PaisDTO> select(String idPaises) {
 		PreparedStatement statement;
 		ResultSet resultSet; // Guarda el resultado de la query
-		TipoContactoDTO tipoContactoNew = null;
+		ArrayList<PaisDTO> paises = new ArrayList<PaisDTO>();
 		try {
-			statement = conexion.getSQLConexion().prepareStatement(select);
-			statement.setInt(1, idTipoContacto);
+			statement = conexion.getSQLConexion()
+					.prepareStatement("SELECT * FROM paises WHERE idPais IN (" + idPaises + ")");
 			resultSet = statement.executeQuery();
 
 			while (resultSet.next()) {
-				tipoContactoNew = new TipoContactoDTO(resultSet.getInt("idTipoContacto"),
-						resultSet.getString("nombre"));
+				paises.add(getPaisDTO(resultSet));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return tipoContactoNew;
+		return paises;
 	}
 
 	@Override
-	public List<TipoContactoDTO> readAll() {
+	public List<PaisDTO> readAll() {
 		PreparedStatement statement;
 		ResultSet resultSet; // Guarda el resultado de la query
-		ArrayList<TipoContactoDTO> tipoContactos = new ArrayList<TipoContactoDTO>();
+		ArrayList<PaisDTO> localidad = new ArrayList<PaisDTO>();
 		try {
 			statement = conexion.getSQLConexion().prepareStatement(readall);
 			resultSet = statement.executeQuery();
 
 			while (resultSet.next()) {
-				TipoContactoDTO tipoContacto = new TipoContactoDTO(resultSet.getInt("idTipoContacto"),
-						resultSet.getString("nombre"));
-				tipoContactos.add(tipoContacto);
+				localidad.add(getPaisDTO(resultSet));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return tipoContactos;
+		return localidad;
+	}
+
+	private PaisDTO getPaisDTO(ResultSet resultSet) throws SQLException {
+		int idPais = resultSet.getInt("idPais");
+		String nombre = resultSet.getString("nombre");
+
+		return new PaisDTO(idPais, nombre);
 	}
 }

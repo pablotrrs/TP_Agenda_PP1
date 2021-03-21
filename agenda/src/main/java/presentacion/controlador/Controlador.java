@@ -1,17 +1,23 @@
 package presentacion.controlador;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import javax.swing.JOptionPane;
 
 import org.javatuples.Pair;
-
+import org.javatuples.Triplet;
 import com.toedter.calendar.JDateChooser;
 import modelo.Agenda;
 import modelo.Localidad;
+import modelo.Pais;
+import modelo.Provincia;
 import modelo.TipoContacto;
 import persistencia.dao.mysql.DAOSQLFactory;
 import presentacion.reportes.ReporteAgenda;
@@ -22,7 +28,9 @@ import presentacion.vista.Vista;
 import presentacion.vista.VistaLocalidades;
 import presentacion.vista.VentanasTiposContacto;
 import dto.LocalidadDTO;
+import dto.PaisDTO;
 import dto.PersonaDTO;
+import dto.ProvinciaDTO;
 import dto.TipoContactoDTO;
 
 public class Controlador {
@@ -35,6 +43,8 @@ public class Controlador {
 	private Agenda agenda;
 	private TipoContacto tipoContacto;
 	private Localidad localidad;
+	private Provincia provincia;
+	private Pais pais;
 	private List<PersonaDTO> personasEnTabla;
 	private List<TipoContactoDTO> tiposContactoEnTabla;
 	private List<LocalidadDTO> localidadesEnTabla;
@@ -51,6 +61,10 @@ public class Controlador {
 		this.ventanaPersona = VentanaPersona.getInstance();
 		this.ventanaPersona.getBtnAgregarPersona().addActionListener(p -> guardarPersona(p));
 		this.ventanaPersona.getBtnEditar().addActionListener(f -> editarPersona(f));
+
+		this.pais = new Pais(new DAOSQLFactory());
+		this.provincia = new Provincia(new DAOSQLFactory());
+		this.localidad = new Localidad(new DAOSQLFactory());
 
 		this.agenda = agenda;
 	}
@@ -81,14 +95,67 @@ public class Controlador {
 
 	private void ventanaEditarPersona(ActionEvent a) {
 		if (this.vista.getTablaPersonas().getSelectedRows().length == 1) {
+			List<LocalidadDTO> localidades = this.localidad.obtenerTodasLocalidades();
+			Map<Integer, LocalidadDTO> localidadesById = new TreeMap<Integer, LocalidadDTO>();
+			for (LocalidadDTO localidad : localidades) {
+				localidadesById.put(localidad.getIdLocalidad(), localidad);
+			}
+
+			List<ProvinciaDTO> provincias = this.provincia.obtenerTodasProvincias();
+			Map<Integer, ProvinciaDTO> provinciasById = new TreeMap<Integer, ProvinciaDTO>();
+			for (ProvinciaDTO provincia : provincias) {
+				provinciasById.put(provincia.getIdProvincia(), provincia);
+			}
+
+			List<PaisDTO> paises = this.pais.obtenerTodosPaises();
+			Map<Integer, PaisDTO> paisesById = new TreeMap<Integer, PaisDTO>();
+			for (PaisDTO pais : paises) {
+				paisesById.put(pais.getIdPais(), pais);
+			}
+//----------------------------------------------------------------------------------------------------------------------------------------------
+			LocalidadDTO loc = localidadesById
+					.get(this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getLocalidad());
+			
+			ProvinciaDTO prov = provinciasById.get(loc.getIdProvincia());
+			PaisDTO pai = paisesById.get(prov.getIdPais());
+
+			int indexPais = -1, indexProv = -1, indexLoc = -1;
+			for (int i = 0; i < this.ventanaPersona.getComboBox_pais().getItemCount(); i++) {
+				System.out.println("pais: " + pais);
+				if (this.ventanaPersona.getComboBox_pais().getItemAt(i).equals(pai)) {
+					indexPais = i;
+				}
+			}
+			this.ventanaPersona.getComboBox_pais().setSelectedIndex(indexPais);
+
+			System.out.println("indexPais: " + indexPais);
+
+			for (int i = 0; i < this.ventanaPersona.getComboBox_provincia().getItemCount(); i++) {
+				if (this.ventanaPersona.getComboBox_provincia().getItemAt(i).equals(prov)) {
+					indexProv = i;
+				}
+
+			}
+			this.ventanaPersona.getComboBox_provincia().setSelectedIndex(indexProv);
+			System.out.println("indexProv: " + indexProv);
+
+			for (int i = 0; i < this.ventanaPersona.getComboBox_localidad().getItemCount(); i++) {
+				if (this.ventanaPersona.getComboBox_localidad().getItemAt(i).equals(loc)) {
+					indexLoc = i;
+				}
+
+			}
+			this.ventanaPersona.getComboBox_localidad().setSelectedIndex(indexLoc);
+			System.out.println("indexLoc: " + indexLoc);
+
 			this.ventanaPersona.getBtnAgregarPersona().setVisible(false);
 			this.ventanaPersona.getBtnEditar().setVisible(true);
 			this.ventanaPersona.setTitle("Editar Persona");
-			System.out.println("****PERONSA A DITAR: "
-					+ this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]));
 
-			this.ventanaPersona
-					.llenarCampos(this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]));
+			this.ventanaPersona.llenarCampos(
+					this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]),
+					this.tipoContacto.obtenerTipoContacto(this.personasEnTabla
+							.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getTipoContacto()));
 
 			this.ventanaPersona.mostrarVentana();
 		}
@@ -120,8 +187,14 @@ public class Controlador {
 			this.ventanaLocalidades.getBtnAgregarLocalidad().setVisible(false);
 			this.ventanaLocalidades.getBtnEditarLocalidad().setVisible(true);
 			this.ventanaLocalidades.setTitle("Editar Localidad");
-			this.ventanaLocalidades.llenarCamposLocalidad(
-					this.localidadesEnTabla.get(this.vistaLocalidades.getTablaLocalidades().getSelectedRows()[0]));
+
+			LocalidadDTO localidad = this.localidadesEnTabla
+					.get(this.vistaLocalidades.getTablaLocalidades().getSelectedRows()[0]);
+			List<LocalidadDTO> localidades = new ArrayList<>();
+			localidades.add(localidad);
+			this.ventanaLocalidades.llenarCamposLocalidad(getLocalidadesWithNames(localidades));
+			System.out.println("****getLocalidadesWithNames(localidades): " + getLocalidadesWithNames(localidades));
+
 			this.ventanaLocalidades.mostrarVentanaLocalidades();
 		}
 	}
@@ -143,58 +216,98 @@ public class Controlador {
 				calle = ventanaPersona.getTxtCalle().getText(), piso = ventanaPersona.getTxtPiso().getText(),
 				altura = ventanaPersona.getTxtAltura().getText(), depto = ventanaPersona.getTxtDepto().getText(),
 				email = ventanaPersona.getTxtEmail().getText(),
-				fechaCumpleanios = toStringFecha(ventanaPersona.getTxtFecha_cumpleaños());
+				fechaCumpleanios = toStringFecha(ventanaPersona.getTxtFechaCumpleanios());
 		TipoContactoDTO tipoContacto = (TipoContactoDTO) ventanaPersona.getComboBoxTipoContacto().getSelectedItem();
-		LocalidadDTO localidad = (LocalidadDTO) ventanaPersona.getComboBoxLocalidades().getSelectedItem();
-		System.out.println("****localidad: " + ventanaPersona.getComboBoxLocalidades().getSelectedItem());
-		System.out.println("****tipoContato: " + ventanaPersona.getComboBoxTipoContacto().getSelectedItem());
-		if (tipoContacto != null) {
-			// if (tipoContacto != null && localidad != null) {
+		LocalidadDTO localidad = (LocalidadDTO) ventanaPersona.getComboBox_localidad().getSelectedItem();
+
+		if (tipoContacto != null && localidad != null && fechaCumpleanios != null) {
 			PersonaDTO nuevaPersona = new PersonaDTO(0, nombre, tel, calle, piso, altura, depto, email,
-					fechaCumpleanios, tipoContacto.getIdTipoContacto(), 1);
+					fechaCumpleanios, tipoContacto.getIdTipoContacto(), localidad.getIdLocalidad());
 
 			this.agenda.agregarPersona(nuevaPersona);
 			this.refrescarTabla();
 			this.ventanaPersona.cerrar();
+
 		}
 	}
 
 	private void agregarLocalidad(ActionEvent k) {
-
 		String pais = this.ventanaLocalidades.getTxtPais().getText();
 		String provincia = this.ventanaLocalidades.getTxtProvincia().getText();
 		String localidad = this.ventanaLocalidades.getTxtLocalidad().getText();
 
-		LocalidadDTO nuevalocalidad = new LocalidadDTO(pais, provincia, localidad, 0);
+		PaisDTO nuevopais = new PaisDTO(0, pais);
+		ProvinciaDTO nuevaprovincia = new ProvinciaDTO(0, this.pais.agregarPais(nuevopais), provincia);
+		LocalidadDTO nuevalocalidad = new LocalidadDTO(0, this.provincia.agregarProvincia(nuevaprovincia), localidad);
 
 		this.localidad.agregarLocalidad(nuevalocalidad);
+
 		this.refrescarLocalidades();
 		this.ventanaLocalidades.cerrar();
+		this.obtenerPaises();
+		// this.obtenerProvincias();
+		// this.obtenerLocalidades();
 	}
 
 	private void editarLocalidad(ActionEvent x) {
-		LocalidadDTO localidad = null;
+		LocalidadDTO localidad = this.localidadesEnTabla
+				.get(this.vistaLocalidades.getTablaLocalidades().getSelectedRows()[0]);
+		List<ProvinciaDTO> provincia = this.provincia.obtenerProvincia(String.valueOf(localidad.getIdProvincia()));
+		List<PaisDTO> pais = this.pais.obtenerPais(String.valueOf(String.valueOf(provincia.get(0).getIdPais())));
 
-		int[] filasSeleccionadas = this.vistaLocalidades.getTablaLocalidades().getSelectedRows();
+		localidad.setNombre(ventanaLocalidades.getTxtLocalidad().getText());
+		provincia.get(0).setNombre(ventanaLocalidades.getTxtProvincia().getText());
+		pais.get(0).setNombre(ventanaLocalidades.getTxtPais().getText());
 
-		for (int fila : filasSeleccionadas) {
-			localidad = this.localidadesEnTabla.get(fila);
-			localidad.setPais(ventanaLocalidades.getTxtPais().getText());
-			localidad.setProvincia(ventanaLocalidades.getTxtProvincia().getText());
-			localidad.setLocalidad(ventanaLocalidades.getTxtLocalidad().getText());
-		}
+		System.out.println("****localidad Editada: " + localidad);
+		System.out.println("****provincia Editada: " + provincia.get(0));
+		System.out.println("****pais Editada: " + pais.get(0));
+
 		this.localidad.editarLocalidad(localidad);
+		this.provincia.editarProvincia(provincia.get(0));
+		this.pais.editarPais(pais.get(0));
+
+		obtenerPaises();
+		// obtenerProvincias();
+		// obtenerLocalidades();}
+		this.refrescarTabla();
 		this.refrescarLocalidades();
 		this.ventanaLocalidades.cerrar();
-
+		this.ventanaPersona.cerrar();
+		this.ventanaTiposContacto.cerrar();
 	}
 
 	private void borrarLocalidad(ActionEvent p) {
+		List<ProvinciaDTO> provincias = this.provincia.obtenerTodasProvincias();
+		Map<Integer, ProvinciaDTO> provinciasById = new TreeMap<Integer, ProvinciaDTO>();
+		for (ProvinciaDTO provincia : provincias) {
+			provinciasById.put(provincia.getIdProvincia(), provincia);
+		}
+
+		List<PaisDTO> paises = this.pais.obtenerTodosPaises();
+		Map<Integer, PaisDTO> paisesById = new TreeMap<Integer, PaisDTO>();
+		for (PaisDTO pais : paises) {
+			paisesById.put(pais.getIdPais(), pais);
+		}
 
 		int[] filasSeleccionadas = this.vistaLocalidades.getTablaLocalidades().getSelectedRows();
 		for (int fila : filasSeleccionadas) {
-			this.localidad.borrarLocalidad((this.localidadesEnTabla.get(fila)));
+
+			if (this.perteneceLocalidad(this.localidadesEnTabla.get(fila).getIdLocalidad())) {
+				JOptionPane.showMessageDialog(ventanaLocalidades,
+						"Debe cambiar la localidad de las personas que poseen esta localidad para borrarla.");
+			} else {
+
+				this.localidad.borrarLocalidad((this.localidadesEnTabla.get(fila)));
+
+				this.provincia
+						.borrarProvincia(provinciasById.get((this.localidadesEnTabla.get(fila)).getIdProvincia()));
+				this.pais.borrarPais(paisesById
+						.get(provinciasById.get((this.localidadesEnTabla.get(fila)).getIdProvincia()).getIdPais()));
+			}
 		}
+		this.ventanaPersona.getValuepais().removeAllElements();
+		this.ventanaPersona.getValuepais().addAll(pais.obtenerTodosPaises());
 		this.refrescarLocalidades();
 	}
 
@@ -210,13 +323,16 @@ public class Controlador {
 		}
 
 		List<String> nombresTiposContactos = new ArrayList<String>();
-		for (TipoContactoDTO tc : this.tipoContacto.obtenerTipoContacto()) {
+		for (TipoContactoDTO tc : this.tipoContacto.obtenerTodosTiposContactos()) {
 			nombresTiposContactos.add(tc.getNombre());
 		}
 		System.out.println(nombresTiposContactos);
 		if (!nombresTiposContactos.contains(tipoContacto.getNombre())) {
 			this.tipoContacto.editarTipoContacto(tipoContacto);
 			this.refrescarTablaContactos();
+			this.refrescarTabla();
+			this.ventanaTiposContacto.cerrar();
+			this.ventanaPersona.cerrar();
 			this.ventanaTiposContacto.cerrar();
 		}
 	}
@@ -234,7 +350,11 @@ public class Controlador {
 			persona.setTelefono(ventanaPersona.getTxtTelefono().getText());
 			persona.setDepto(ventanaPersona.getTxtDepto().getText());
 			persona.setEmail(ventanaPersona.getTxtEmail().getText());
-			persona.setFechaCumpleanios(this.toStringFecha(ventanaPersona.getTxtFecha_cumpleaños()));
+			persona.setFechaCumpleanios(this.toStringFecha(ventanaPersona.getTxtFechaCumpleanios()));
+			TipoContactoDTO tp = (TipoContactoDTO) ventanaPersona.getComboBoxTipoContacto().getSelectedItem();
+			persona.setTipoContacto(tp.getIdTipoContacto());
+			LocalidadDTO localidad = (LocalidadDTO) ventanaPersona.getComboBox_localidad().getSelectedItem();
+			persona.setLocalidad(localidad.getIdLocalidad());
 		}
 
 		this.agenda.editarPersona(persona);
@@ -248,7 +368,7 @@ public class Controlador {
 		TipoContactoDTO nuevoTipo = new TipoContactoDTO(0, nombre);
 
 		List<String> nombresTiposContactos = new ArrayList<String>();
-		for (TipoContactoDTO tc : this.tipoContacto.obtenerTipoContacto()) {
+		for (TipoContactoDTO tc : this.tipoContacto.obtenerTodosTiposContactos()) {
 			nombresTiposContactos.add(tc.getNombre());
 		}
 		if (!nombresTiposContactos.contains(nuevoTipo.getNombre())) {
@@ -277,10 +397,35 @@ public class Controlador {
 
 		int[] filasSeleccionadas = this.vistaTiposContacto.getTablaTiposContacto().getSelectedRows();
 		for (int fila : filasSeleccionadas) {
-			this.tipoContacto.borrarTipoContacto((this.tiposContactoEnTabla.get(fila)));
+			if (this.perteneceTipoContacto(this.tiposContactoEnTabla.get(fila).getIdTipoContacto())) {
+				JOptionPane.showMessageDialog(ventanaTiposContacto,
+						"Debe cambiar el tipo de contacto de las personas que poseen este tipo de contacto para borrarlo.");
+			} else
+				this.tipoContacto.borrarTipoContacto((this.tiposContactoEnTabla.get(fila)));
 		}
+		obtenerTiposDeContacto();
 
 		this.refrescarTablaContactos();
+	}
+
+	public boolean perteneceTipoContacto(int id) {
+		boolean ret = false;
+		for (int i = 0; i < this.agenda.obtenerPersonas().size(); i++) {
+			if (this.agenda.obtenerPersonas().get(i).getTipoContacto() == id) {
+				ret = true;
+			}
+		}
+		return ret;
+	}
+
+	public boolean perteneceLocalidad(int id) {
+		boolean ret = false;
+		for (int i = 0; i < this.agenda.obtenerPersonas().size(); i++) {
+			if (this.agenda.obtenerPersonas().get(i).getLocalidad() == id) {
+				ret = true;
+			}
+		}
+		return ret;
 	}
 
 	public void inicializarTipoContacto() {
@@ -296,9 +441,10 @@ public class Controlador {
 		this.ventanaTiposContacto.getBtnAgregarTipoDeContacto().addActionListener(s -> guardarTipoDeContacto(s));
 		this.tipoContacto = new TipoContacto(new DAOSQLFactory());
 
-		this.tiposContactoEnTabla = tipoContacto.obtenerTipoContacto();
+		this.tiposContactoEnTabla = tipoContacto.obtenerTodosTiposContactos();
 		obtenerTiposDeContacto();
 		this.refrescarTablaContactos();
+
 	}
 
 	public void inicializarLocalidades() {
@@ -313,25 +459,82 @@ public class Controlador {
 		this.ventanaLocalidades = new VentanaLocalidades();
 		this.ventanaLocalidades.getBtnAgregarLocalidad().addActionListener(a -> agregarLocalidad(a));
 		this.ventanaLocalidades.getBtnEditarLocalidad().addActionListener(g -> editarLocalidad(g));
-		this.localidad = new Localidad(new DAOSQLFactory());
 
-		this.localidadesEnTabla = localidad.obtenerLocalidades();
-		obtenerTiposDeContacto();
+		this.localidadesEnTabla = localidad.obtenerTodasLocalidades();
+		obtenerPaises();
 		this.refrescarLocalidades();
-
 	}
 
 	public void obtenerTiposDeContacto() {
 		this.ventanaPersona.getDefaultComboBoxModelValue().removeAllElements();
-		this.ventanaPersona.getDefaultComboBoxModelValue().addAll(tipoContacto.obtenerTipoContacto());
+		this.ventanaPersona.getDefaultComboBoxModelValue().addAll(tipoContacto.obtenerTodosTiposContactos());
+	}
+
+	public void obtenerPaises() {
+		this.ventanaPersona.getValuepais().removeAllElements();
+		this.ventanaPersona.getValuepais().addAll(pais.obtenerTodosPaises());
+
+		this.ventanaPersona.getComboBox_pais().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (ventanaPersona.getComboBox_pais().getSelectedItem() != null) {
+					ventanaPersona.getComboBox_provincia().setSelectedIndex(-1);
+					ventanaPersona.getComboBox_localidad().setSelectedIndex(-1);
+
+					PaisDTO pais = (PaisDTO) ventanaPersona.getComboBox_pais().getSelectedItem();
+					obtenerProvincias(String.valueOf(pais.getIdPais()));
+				}
+			}
+		});
+	}
+
+	public void obtenerProvincias(String idPais) {
+		this.ventanaPersona.getValueprov().removeAllElements();
+		this.provincia.dameProvinciasDelPais(idPais);
+
+		this.ventanaPersona.getComboBox_provincia().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (ventanaPersona.getComboBox_provincia().getSelectedItem() != null) {
+					ProvinciaDTO provincia = (ProvinciaDTO) ventanaPersona.getComboBox_provincia().getSelectedItem();
+					obtenerLocalidades(String.valueOf(provincia.getIdProvincia()));
+				}
+			}
+		});
+		this.ventanaPersona.getValueprov().addAll(this.provincia.dameProvinciasDelPais(idPais));
+
+	}
+
+	public void obtenerLocalidades(String idProvincia) {
+		this.ventanaPersona.getValueloc().removeAllElements();
+		this.ventanaPersona.getValueloc().addAll(this.localidad.dameLocalidadesDeLaProvincia(idProvincia));
+
 	}
 
 	private void refrescarTabla() {
 		this.personasEnTabla = agenda.obtenerPersonas();
 
+		List<LocalidadDTO> localidades = this.localidad.obtenerTodasLocalidades();
+		Map<Integer, LocalidadDTO> localidadesById = new TreeMap<Integer, LocalidadDTO>();
+		for (LocalidadDTO localidad : localidades) {
+			localidadesById.put(localidad.getIdLocalidad(), localidad);
+		}
+
+		List<ProvinciaDTO> provincias = this.provincia.obtenerTodasProvincias();
+		Map<Integer, ProvinciaDTO> provinciasById = new TreeMap<Integer, ProvinciaDTO>();
+		for (ProvinciaDTO provincia : provincias) {
+			provinciasById.put(provincia.getIdProvincia(), provincia);
+		}
+
+		List<PaisDTO> paises = this.pais.obtenerTodosPaises();
+		Map<Integer, PaisDTO> paisesById = new TreeMap<Integer, PaisDTO>();
+		for (PaisDTO pais : paises) {
+			paisesById.put(pais.getIdPais(), pais);
+		}
+
 		this.tipoContacto = new TipoContacto(new DAOSQLFactory());
 		Map<Integer, String> tiposDeContactosByIds = new LinkedHashMap<Integer, String>();
-		for (TipoContactoDTO tipoDeContacto : this.tipoContacto.obtenerTipoContacto()) {
+		for (TipoContactoDTO tipoDeContacto : this.tipoContacto.obtenerTodosTiposContactos()) {
 			if (!tiposDeContactosByIds.containsKey(tipoDeContacto.getIdTipoContacto())) {
 				tiposDeContactosByIds.put(tipoDeContacto.getIdTipoContacto(), tipoDeContacto.getNombre());
 			}
@@ -348,16 +551,70 @@ public class Controlador {
 					persona.getValue1()));
 		}
 
-		this.vista.llenarTabla(personas2);
+		this.vista.llenarTabla(personas2, provinciasById, tiposDeContactosByIds, localidadesById, paisesById);
 	}
 
 	private void refrescarTablaContactos() {
-		this.tiposContactoEnTabla = tipoContacto.obtenerTipoContacto();
+		this.tiposContactoEnTabla = tipoContacto.obtenerTodosTiposContactos();
 		this.vistaTiposContacto.llenarTabla(this.tiposContactoEnTabla);
 	}
 
 	private void refrescarLocalidades() {
-		this.localidadesEnTabla = localidad.obtenerLocalidades();
-		this.vistaLocalidades.llenarTabla(this.localidadesEnTabla);
+		this.localidadesEnTabla = localidad.obtenerTodasLocalidades();
+
+		List<Triplet<String, String, String>> localidades = getLocalidadesWithNames(this.localidadesEnTabla);
+
+		this.vistaLocalidades.llenarTabla(localidades);
+	}
+
+	public List<Triplet<String, String, String>> getLocalidadesWithNames(List<LocalidadDTO> localidades) {
+		Map<Integer, String> provinciasByName = new TreeMap<>();
+		Map<Integer, String> paisesByName = new TreeMap<>();
+		Map<Integer, Integer> provinciasIDsByPaisID = new TreeMap<>();
+
+		String idsProvincias = "";
+		String idsPaises = "";
+
+		for (LocalidadDTO localidad : localidades) {
+			idsProvincias += (String.valueOf(localidad.getIdProvincia()) + ", ");
+		}
+
+		if (idsProvincias.length() > 0) {
+			idsProvincias = idsProvincias.substring(0, idsProvincias.length() - 2);
+		} else {
+			idsProvincias = "-1";
+		}
+
+		List<ProvinciaDTO> provincias = this.provincia.obtenerProvincia(idsProvincias);
+
+		for (ProvinciaDTO provincia : provincias) {
+			provinciasByName.put(provincia.getIdProvincia(), provincia.getNombre());
+			provinciasIDsByPaisID.put(provincia.getIdProvincia(), provincia.getIdPais());
+			idsPaises += (String.valueOf(provincia.getIdPais()) + ", ");
+		}
+
+		if (idsPaises.length() > 0) {
+			idsPaises = idsPaises.substring(0, idsPaises.length() - 2);
+		} else {
+			idsPaises = "-1";
+		}
+
+		List<PaisDTO> paises = this.pais.obtenerPais(idsPaises);
+
+		for (PaisDTO pais : paises) {
+			paisesByName.put(pais.getIdPais(), pais.getNombre());
+		}
+
+		// System.out.println("provinciasByName: " + provinciasByName);
+		// System.out.println("paisesByName: " + paisesByName);
+		// System.out.println("****localidadesEnTabla: " + localidadesEnTabla);
+
+		List<Triplet<String, String, String>> localidadesWithNames = new ArrayList<Triplet<String, String, String>>();
+		for (LocalidadDTO localidad : localidades) {
+			localidadesWithNames.add(new Triplet<String, String, String>(
+					paisesByName.get(provinciasIDsByPaisID.get(localidad.getIdProvincia())),
+					provinciasByName.get(localidad.getIdProvincia()), localidad.getNombre()));
+		}
+		return localidadesWithNames;
 	}
 }

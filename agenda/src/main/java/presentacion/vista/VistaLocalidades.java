@@ -1,15 +1,13 @@
 package presentacion.vista;
 
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import dto.LocalidadDTO;
-
+import org.javatuples.Triplet;
 
 public class VistaLocalidades {
 	
@@ -38,9 +36,9 @@ public class VistaLocalidades {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
-		JScrollPane spTiposContacto = new JScrollPane();
-		spTiposContacto.setBounds(10, 11, 300, 182);
-		panel.add(spTiposContacto);
+		JScrollPane spLocalidad = new JScrollPane();
+		spLocalidad.setBounds(10, 11, 300, 182);
+		panel.add(spLocalidad);
 
 		modelLocalidades = new DefaultTableModel(null, nombreColumnas);
 		tablaLocalidades = new JTable(modelLocalidades);
@@ -49,7 +47,7 @@ public class VistaLocalidades {
 		tablaLocalidades.getColumnModel().getColumn(0).setResizable(false);
 		
 		
-		spTiposContacto.setViewportView(tablaLocalidades);
+		spLocalidad.setViewportView(tablaLocalidades);
 		
 
 		btnAgregar = new JButton("Agregar");
@@ -95,15 +93,15 @@ public class VistaLocalidades {
 		return nombreColumnas;
 	}
 	
-	public void llenarTabla(List<LocalidadDTO> localidadesEnTabla) {
+	public void llenarTabla(List<Triplet<String, String, String>> localidades) {
 		this.getModelLocalidades().setRowCount(0); // Para vaciar la tabla
 		this.getModelLocalidades().setColumnCount(0);
 		this.getModelLocalidades().setColumnIdentifiers(this.getNombreColumnas());
 
-		for (LocalidadDTO p : localidadesEnTabla) {
-			String pais = p.getPais();
-			String provincia = p.getProvincia();
-			String localidad = p.getLocalidad();
+		for (Triplet<String, String, String> p : localidades) {
+			String pais = p.getValue0();
+			String provincia = p.getValue1();
+			String localidad = p.getValue2();
 			Object[] fila = { pais, provincia, localidad};
 
 			this.getModelLocalidades().addRow(fila);
