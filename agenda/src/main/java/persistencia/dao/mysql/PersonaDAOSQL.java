@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import persistencia.conexion.Conexion;
 import persistencia.dao.interfaz.PersonaDAO;
 import dto.PersonaDTO;
@@ -57,7 +56,6 @@ public class PersonaDAOSQL implements PersonaDAO {
 		boolean isUpdateExitoso = false;
 		try {
 			statement = conexion.prepareStatement(update);
-
 			statement.setString(1, persona.getNombre());
 			statement.setString(2, persona.getTelefono());
 			statement.setString(3, persona.getCalle());
@@ -67,8 +65,8 @@ public class PersonaDAOSQL implements PersonaDAO {
 			statement.setString(7, persona.getEmail());
 			statement.setString(8, persona.getFechaCumpleanios());
 			statement.setInt(9, persona.getTipoContacto());
-			statement.setInt(10, persona.getIdPersona());
-			statement.setInt(11, persona.getLocalidad());
+			statement.setInt(10, persona.getLocalidad());
+			statement.setInt(11, persona.getIdPersona());
 
 			if (statement.executeUpdate() > 0) {
 				conexion.commit();

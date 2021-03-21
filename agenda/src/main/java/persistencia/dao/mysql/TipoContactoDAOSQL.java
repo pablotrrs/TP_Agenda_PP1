@@ -10,7 +10,7 @@ import dto.TipoContactoDTO;
 import persistencia.conexion.Conexion;
 import persistencia.dao.interfaz.TipoContactoDAO;
 
-public class TipoContactoDAOImpl implements TipoContactoDAO {
+public class TipoContactoDAOSQL implements TipoContactoDAO {
 	private static final String insert = "INSERT INTO tiposDeContactos (nombre) VALUES(?)";
 	private static final String update = "UPDATE tiposDeContactos SET nombre = ? WHERE idTipoContacto = ?";
 	private static final String delete = "DELETE FROM tiposDeContactos WHERE nombre = ?";
