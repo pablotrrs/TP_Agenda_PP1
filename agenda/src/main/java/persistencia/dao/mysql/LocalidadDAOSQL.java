@@ -39,7 +39,6 @@ public class LocalidadDAOSQL implements LocalidadDAO {
 			    generatedKey = rs.getInt(1);
 			}
 			 
-			System.out.println("Inserted record's ID LOCALIDAD: " + generatedKey);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

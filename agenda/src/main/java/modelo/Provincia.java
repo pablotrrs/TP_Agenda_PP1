@@ -8,31 +8,35 @@ import persistencia.dao.interfaz.ProvinciaDAO;
 public class Provincia {
 	private ProvinciaDAO provincia;
 
-	public Provincia(DAOAbstractFactory metodo_persistencia) {
-		this.provincia = metodo_persistencia.createProvinciaDAO();
+	public Provincia(DAOAbstractFactory metodoPersistencia) {
+		this.provincia = metodoPersistencia.createProvinciaDAO();
 	}
 
-	public int agregarProvincia(ProvinciaDTO provincia) {
-		return this.provincia.insert(provincia);
+	public int agregarProvincia(ProvinciaDTO nuevaProvincia) {
+		return this.provincia.insert(nuevaProvincia);
 	}
 
-	public void borrarProvincia(ProvinciaDTO provincia_a_eliminar) {
-		this.provincia.delete(provincia_a_eliminar);
+	public void borrarProvincia(ProvinciaDTO provincia) {
+		this.provincia.delete(provincia);
 	}
 
-	public void editarProvincia(ProvinciaDTO provincia_a_editar) {
-		this.provincia.update(provincia_a_editar);
+	public void editarProvincia(ProvinciaDTO provincia) {
+		this.provincia.update(provincia);
+	}
+	
+	public List<ProvinciaDTO> obtenerTodasLasProvincias() {
+		return this.provincia.readAll();
 	}
 	
 	public List<ProvinciaDTO> obtenerProvincia(String provincia) {
-		return this.provincia.select(provincia);
+		return this.provincia.selectProvincias(provincia);
 	}
 
-	public List<ProvinciaDTO> obtenerTodasProvincias() {
-		return this.provincia.readAll();
+	public ProvinciaDTO existeProvincia(int idPais, String provincia) {
+		return this.provincia.existeProvincia(idPais, provincia);
 	}
 
-	public List<ProvinciaDTO> dameProvinciasDelPais(String idPais){
-		return this.provincia.dameProvinciasDelPais(idPais);
+	public List<ProvinciaDTO> obtenerProvinciasDelPais(String idPais){
+		return this.provincia.obtenerProvinciasDelPais(idPais);
 	}
 }

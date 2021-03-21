@@ -17,16 +17,13 @@ public class VentanasTiposContacto {
 	private JButton btnBorrar;
 	private DefaultTableModel modelTiposContacto;
 	private String[] nombreColumnas = { "Tipo" };
-	
 
-	public VentanasTiposContacto() 
-	{
+	public VentanasTiposContacto() {
 		super();
 		initialize();
 	}
 
-	private void initialize() 
-	{
+	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 340, 300);
 		frame.getContentPane().setLayout(null);
@@ -41,15 +38,21 @@ public class VentanasTiposContacto {
 		panel.add(spTiposContacto);
 
 		modelTiposContacto = new DefaultTableModel(null, nombreColumnas);
-		tablaTiposContacto = new JTable(modelTiposContacto);
+		tablaTiposContacto = new JTable(modelTiposContacto) {
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		;
 
 		tablaTiposContacto.getColumnModel().getColumn(0).setPreferredWidth(103);
 		tablaTiposContacto.getColumnModel().getColumn(0).setResizable(false);
-		//tablaTiposContacto.getColumnModel().getColumn(1).setPreferredWidth(100);
-		//tablaTiposContacto.getColumnModel().getColumn(1).setResizable(false);
-		
+		// tablaTiposContacto.getColumnModel().getColumn(1).setPreferredWidth(100);
+		// tablaTiposContacto.getColumnModel().getColumn(1).setResizable(false);
+
 		spTiposContacto.setViewportView(tablaTiposContacto);
-		
 
 		btnAgregar = new JButton("Agregar");
 		btnAgregar.setBounds(10, 228, 89, 23);

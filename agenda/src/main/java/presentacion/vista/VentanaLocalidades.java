@@ -5,9 +5,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import org.javatuples.Triplet;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.util.List;
 import javax.swing.JButton;
+
 public class VentanaLocalidades extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -77,8 +79,6 @@ public class VentanaLocalidades extends JFrame {
 		btnEditar.setBounds(89, 124, 106, 23);
 		contentPane.add(btnEditar);
 
-		
-
 		this.setVisible(false);
 	}
 
@@ -135,5 +135,26 @@ public class VentanaLocalidades extends JFrame {
 		txtPais.setText(localidades.get(0).getValue0());
 		txtProvincia.setText(localidades.get(0).getValue1());
 		txtLocalidad.setText(localidades.get(0).getValue2());
+	}
+
+	public void mostrarMensajeError() {
+		JOptionPane.showMessageDialog(this,
+				"Debe cambiar la localidad de las personas que poseen esta localidad para borrarla.");
+	}
+
+	public void cambiarTituloAEditar() {
+		this.setTitle("Editar Localidad");
+	}
+
+	public void cambiarTituloAagregar() {
+		this.setTitle("Agregar Localidad");
+	}
+
+	public void ActivarButton(JButton btn) {
+		btn.setVisible(true);
+	}
+
+	public void ApagarButton(JButton btn) {
+		btn.setVisible(false);
 	}
 }

@@ -34,11 +34,11 @@ CREATE TABLE `personas`
 (
     `idPersona` int(11) NOT NULL AUTO_INCREMENT,
     `nombre` varchar(45) NOT NULL,
-    `telefono` varchar(20) NOT NULL,
+    `telefono` varchar(30) NOT NULL,
     `calle` varchar(20) NOT NULL,
-    `piso`  varchar(4) NOT NULL,
-    `altura` varchar(4) NOT NULL,
-    `depto` varchar(4) NOT NULL,
+    `piso`  varchar(15) NOT NULL,
+    `altura` varchar(15) NOT NULL,
+    `depto` varchar(15) NOT NULL,
     `email` varchar(50) NOT NULL,
     `fechaCumpleanios` date DEFAULT NULL,
     PRIMARY KEY (`idPersona`),
@@ -47,6 +47,10 @@ CREATE TABLE `personas`
     `idLocalidad` int(11) NOT NULL,
     FOREIGN KEY (`idLocalidad`) REFERENCES `localidad`(`idLocalidad`)
 );
+
+INSERT INTO tiposDeContactos (idTipoContacto, nombre) VALUES (1, 'Trabajo');
+INSERT INTO tiposDeContactos (idTipoContacto, nombre) VALUES (2, 'Amigos');
+INSERT INTO tiposDeContactos (idTipoContacto, nombre) VALUES (3, 'Familia');
 
 
 
