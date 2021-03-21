@@ -3,7 +3,7 @@ package dto;
 public class LocalidadDTO {
 	private int idLocalidad, idProvincia;
 	private String nombre;
-	
+
 	public LocalidadDTO(int idLocalidad, int idProvincia, String nombre) {
 		super();
 		this.idLocalidad = idLocalidad;

@@ -11,7 +11,9 @@ public interface PaisDAO {
 
 	public boolean delete(PaisDTO pais_a_eliminar);
 
-	public List<PaisDTO> select(String paises);
+	public List<PaisDTO> selectPaises(String paises);
 
 	public List<PaisDTO> readAll();
+
+	public List<PaisDTO> selectPais(String pais_a_eliminar);
 }

@@ -16,26 +16,29 @@ public class PaisDAOSQL implements PaisDAO {
 	private static final String update = "UPDATE paises SET nombre = ? WHERE idPais = ?";
 	private static final String delete = "DELETE FROM paises WHERE idPais = ?";
 	private static final String readall = "SELECT * FROM paises";
+	private static final String select = "SELECT * FROM paises WHERE nombre = ?";
 	private static final Conexion conexion = Conexion.getConexion();
 
 	@Override
-	public int insert(PaisDTO pais_a_editar) {
+	public int insert(PaisDTO pais) {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
-		int generatedKey = 0;
+		int idPais = 0;
+
 		try {
 			statement = conexion.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
-			statement.setInt(1, pais_a_editar.getIdPais());
-			statement.setString(2, pais_a_editar.getNombre());
+			statement.setInt(1, pais.getIdPais());
+			statement.setString(2, pais.getNombre());
 
 			if (!statement.execute()) {
 				conexion.commit();
 			}
 
 			ResultSet rs = statement.getGeneratedKeys();
-			generatedKey = 0;
+			idPais = 0;
+
 			if (rs.next()) {
-				generatedKey = rs.getInt(1);
+				idPais = rs.getInt(1);
 			}
 
 		} catch (SQLException e) {
@@ -47,7 +50,7 @@ public class PaisDAOSQL implements PaisDAO {
 			}
 		}
 
-		return generatedKey;
+		return idPais;
 	}
 
 	@Override
@@ -55,6 +58,7 @@ public class PaisDAOSQL implements PaisDAO {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isUpdateExitoso = false;
+
 		try {
 			statement = conexion.prepareStatement(update);
 
@@ -82,6 +86,7 @@ public class PaisDAOSQL implements PaisDAO {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isdeleteExitoso = false;
+
 		try {
 			statement = conexion.prepareStatement(delete);
 			statement.setInt(1, pais_a_eliminar.getIdPais());
@@ -93,14 +98,38 @@ public class PaisDAOSQL implements PaisDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return isdeleteExitoso;
 	}
 
 	@Override
-	public List<PaisDTO> select(String idPaises) {
+	public List<PaisDTO> selectPais(String pais_a_eliminar) {
+		PreparedStatement statement;
+		ResultSet resultSet; // Guarda el resultado de la query
+		List<PaisDTO> paises = new ArrayList<PaisDTO>();
+		try {
+			statement = conexion.getSQLConexion().prepareStatement(select);
+			statement.setString(1, pais_a_eliminar);
+
+			resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+				paises.add(getPaisDTO(resultSet));
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return paises;
+	}
+
+	@Override
+	public List<PaisDTO> selectPaises(String idPaises) {
 		PreparedStatement statement;
 		ResultSet resultSet; // Guarda el resultado de la query
 		ArrayList<PaisDTO> paises = new ArrayList<PaisDTO>();
+
 		try {
 			statement = conexion.getSQLConexion()
 					.prepareStatement("SELECT * FROM paises WHERE idPais IN (" + idPaises + ")");
@@ -113,6 +142,7 @@ public class PaisDAOSQL implements PaisDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return paises;
 	}
 
@@ -136,9 +166,6 @@ public class PaisDAOSQL implements PaisDAO {
 	}
 
 	private PaisDTO getPaisDTO(ResultSet resultSet) throws SQLException {
-		int idPais = resultSet.getInt("idPais");
-		String nombre = resultSet.getString("nombre");
-
-		return new PaisDTO(idPais, nombre);
+		return new PaisDTO(resultSet.getInt("idPais"), resultSet.getString("nombre"));
 	}
 }

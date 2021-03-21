@@ -25,7 +25,6 @@ public class DAOSQLFactory implements DAOAbstractFactory {
 	}
 
 	public LocalidadDAO createLocalidadDAO() {
-
 		return new LocalidadDAOSQL();
 	}
 

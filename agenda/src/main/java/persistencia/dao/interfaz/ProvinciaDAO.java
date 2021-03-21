@@ -11,10 +11,11 @@ public interface ProvinciaDAO {
 
 	public boolean delete(ProvinciaDTO provincia_a_eliminar);
 
-	public List<ProvinciaDTO> select(String idProvincias);
+	public List<ProvinciaDTO> selectProvincias(String idProvincias);
 
 	public List<ProvinciaDTO> readAll();
 
-	public List<ProvinciaDTO> dameProvinciasDelPais(String idPais);
-	//public List<ProvinciaDTO> selectWherePais(String idPais);
+	public List<ProvinciaDTO> obtenerProvinciasDelPais(String idPais);
+
+	public ProvinciaDTO existeProvincia(int idPais, String provincia);
 }
