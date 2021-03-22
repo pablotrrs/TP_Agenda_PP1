@@ -30,8 +30,8 @@ public class Vista {
 	private JButton btnABMtiposContacto;
 	private JButton btnABMlocalidades;
 	private DefaultTableModel modelPersonas;
-	private String[] nombreColumnas = { "Nombre y apellido", "Teléfono", "Domicilio", "Email", "Fecha de Cumpleaños",
-			"Tipo de Contacto", "Localidad" };
+	private String[] nombreColumnas = { "Nombre y apellido", "Teléfono", "Domicilio", "Localidad", "Email", "Fecha de Cumpleaños",
+			"Tipo de Contacto" };
 
 	public Vista() {
 		super();
@@ -159,8 +159,8 @@ public class Vista {
 		for (Pair<String, PersonaDTO> persona : personas2) {
 			String nombre = persona.getValue1().getNombre();
 			String tel = persona.getValue1().getTelefono();
-			String domicilio = persona.getValue1().getCalle() + " " + persona.getValue1().getAltura() + "  "
-					+ persona.getValue1().getPiso() + "   " + persona.getValue1().getDepto();
+			String domicilio = persona.getValue1().getCalle() + " " + persona.getValue1().getAltura() + "  (P"
+					+ persona.getValue1().getPiso() + ", D" + persona.getValue1().getDepto() + ")";
 			String email = persona.getValue1().getEmail();
 			String fechaCumpleanios = persona.getValue1().getFechaCumpleanios();
 
@@ -168,8 +168,8 @@ public class Vista {
 			ProvinciaDTO provincia = provinciasById.get(localidad.getIdProvincia());
 			PaisDTO pais = paisesById.get(provincia.getIdPais());
 
-			String str = localidad.getNombre() + ", " + provincia.getNombre() + ", " + pais.getNombre() + ".";
-			Object[] fila = { nombre, tel, domicilio, email, fechaCumpleanios, persona.getValue0(), str };
+			String locadlidadFull = localidad.getNombre() + ", " + provincia.getNombre() + ", " + pais.getNombre() + ".";
+			Object[] fila = { nombre, tel, domicilio, locadlidadFull, email, fechaCumpleanios, persona.getValue0() };
 
 			this.getModelPersonas().addRow(fila);
 		}
