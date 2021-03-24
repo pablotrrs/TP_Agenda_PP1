@@ -3,6 +3,7 @@ package presentacion.vista;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -51,14 +52,14 @@ public class VentanaPersona extends JFrame {
 		setBackground(Color.WHITE);
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 355, 485);
+		setBounds(100, 100, 376, 494);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 319, 396);
+		panel.setBounds(10, 11, 340, 396);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -84,32 +85,32 @@ public class VentanaPersona extends JFrame {
 		lblNombreYApellido.setBounds(10, 11, 113, 14);
 
 		txtNombre = new JTextField();
-		txtNombre.setBounds(133, 8, 164, 20);
+		txtNombre.setBounds(166, 8, 164, 20);
 		panel.add(txtNombre);
 		txtNombre.setColumns(10);
 
 		txtTelefono = new JTextField();
-		txtTelefono.setBounds(133, 39, 164, 20);
+		txtTelefono.setBounds(166, 39, 164, 20);
 		panel.add(txtTelefono);
 		txtTelefono.setColumns(10);
 
 		txtCalle = new JTextField();
-		txtCalle.setBounds(133, 77, 164, 20);
+		txtCalle.setBounds(166, 74, 164, 20);
 		panel.add(txtCalle);
 		txtCalle.setColumns(10);
 
 		txtPiso = new JTextField();
-		txtPiso.setBounds(133, 141, 164, 20);
+		txtPiso.setBounds(166, 146, 164, 20);
 		panel.add(txtPiso);
 		txtPiso.setColumns(10);
 
 		txtAltura = new JTextField();
-		txtAltura.setBounds(133, 110, 164, 20);
+		txtAltura.setBounds(166, 110, 164, 20);
 		panel.add(txtAltura);
 		txtAltura.setColumns(10);
 
 		txtDepto = new JTextField();
-		txtDepto.setBounds(133, 177, 164, 20);
+		txtDepto.setBounds(166, 177, 164, 20);
 		panel.add(txtDepto);
 		txtDepto.setColumns(10);
 
@@ -122,7 +123,7 @@ public class VentanaPersona extends JFrame {
 		panel.add(lblEmail);
 
 		JLabel lblFecha_cumpleaños = new JLabel("Fecha de cumplea\u00F1os");
-		lblFecha_cumpleaños.setBounds(10, 331, 113, 14);
+		lblFecha_cumpleaños.setBounds(10, 331, 146, 14);
 		panel.add(lblFecha_cumpleaños);
 
 		JLabel lblPais = new JLabel("Pa\u00EDs");
@@ -130,7 +131,7 @@ public class VentanaPersona extends JFrame {
 		panel.add(lblPais);
 
 		txtEmail = new JTextField();
-		txtEmail.setBounds(133, 299, 164, 20);
+		txtEmail.setBounds(166, 300, 164, 20);
 		panel.add(txtEmail);
 		txtEmail.setColumns(10);
 
@@ -139,17 +140,17 @@ public class VentanaPersona extends JFrame {
 		panel.add(lblTipo_contacto);
 
 		comboBox_tipo_contacto = new JComboBox<TipoContactoDTO>();
-		comboBox_tipo_contacto.setBounds(133, 359, 164, 22);
+		comboBox_tipo_contacto.setBounds(166, 352, 164, 22);
 		value = new DefaultComboBoxModel<TipoContactoDTO>();
 		comboBox_tipo_contacto.setModel(value);
 		panel.add(comboBox_tipo_contacto);
 
 		fecha_cumpleaños = new JDateChooser();
-		fecha_cumpleaños.setBounds(133, 331, 164, 20);
+		fecha_cumpleaños.setBounds(166, 325, 164, 20);
 		panel.add(fecha_cumpleaños);
 
 		comboBox_pais = new JComboBox<PaisDTO>();
-		comboBox_pais.setBounds(133, 208, 164, 22);
+		comboBox_pais.setBounds(166, 208, 164, 22);
 		valuepais = new DefaultComboBoxModel<PaisDTO>();
 		comboBox_pais.setModel(valuepais);
 		panel.add(comboBox_pais);
@@ -159,7 +160,7 @@ public class VentanaPersona extends JFrame {
 		panel.add(lblProvincia);
 
 		comboBox_provincia = new JComboBox<ProvinciaDTO>();
-		comboBox_provincia.setBounds(133, 241, 164, 22);
+		comboBox_provincia.setBounds(166, 241, 164, 22);
 		valueprov = new DefaultComboBoxModel<ProvinciaDTO>();
 		comboBox_provincia.setModel(valueprov);
 		panel.add(comboBox_provincia);
@@ -169,17 +170,17 @@ public class VentanaPersona extends JFrame {
 		panel.add(lblLocalidad);
 
 		comboBox_localidad = new JComboBox<LocalidadDTO>();
-		comboBox_localidad.setBounds(133, 270, 164, 22);
+		comboBox_localidad.setBounds(166, 274, 164, 22);
 		valueloc = new DefaultComboBoxModel<LocalidadDTO>();
 		comboBox_localidad.setModel(valueloc);
 		panel.add(comboBox_localidad);
 
 		btnAgregarPersona = new JButton("Agregar");
-		btnAgregarPersona.setBounds(217, 418, 89, 23);
+		btnAgregarPersona.setBounds(236, 418, 89, 23);
 		contentPane.add(btnAgregarPersona);
 
 		btnEditar = new JButton("Actualizar");
-		btnEditar.setBounds(196, 418, 110, 23);
+		btnEditar.setBounds(215, 418, 110, 23);
 		contentPane.add(btnEditar);
 
 		this.setVisible(false);
@@ -198,13 +199,15 @@ public class VentanaPersona extends JFrame {
 	}
 
 	public void toStringFechaInverso(JDateChooser fecha_cumpleaños, String fecha) {
-		String String_anio = fecha.substring(0, 4);
-		String String_mes = fecha.substring(5, 7);
-		String String_dia = fecha.substring(8, 10);
-		int anio = Integer.parseInt(String_anio);
-		int mes = Integer.parseInt(String_mes) - 1;
-		int dia = Integer.parseInt(String_dia);
-		fecha_cumpleaños.setCalendar(new GregorianCalendar(anio, mes, dia));
+		if (fecha != null) {
+			String String_anio = fecha.substring(0, 4);
+			String String_mes = fecha.substring(5, 7);
+			String String_dia = fecha.substring(8, 10);
+			int anio = Integer.parseInt(String_anio);
+			int mes = Integer.parseInt(String_mes) - 1;
+			int dia = Integer.parseInt(String_dia);
+			fecha_cumpleaños.setCalendar(new GregorianCalendar(anio, mes, dia));
+		}
 	}
 
 	public void vaciarCampos() {
@@ -222,19 +225,19 @@ public class VentanaPersona extends JFrame {
 
 		fecha_cumpleaños.setDate(null);
 	}
-	
+
 	public void setValorComboBoxPais(int index) {
 		comboBox_pais.setSelectedIndex(index);
 	}
-	
+
 	public void setValorComboBoxProvincia(int index) {
 		comboBox_provincia.setSelectedIndex(index);
 	}
-	
+
 	public void setValorComboBoxLocalidad(int index) {
 		comboBox_localidad.setSelectedIndex(index);
 	}
-	
+
 	public void cerrar() {
 		this.txtNombre.setText(null);
 		this.txtTelefono.setText(null);
@@ -331,5 +334,13 @@ public class VentanaPersona extends JFrame {
 
 	public JButton getBtnEditar() {
 		return btnEditar;
+	}
+
+	public void mostrarMensajeCamposRequeridos() {
+		JOptionPane.showMessageDialog(this, "Para agregar una persona que debe indicar: Nombre, teléfono y Email.");
+	}
+
+	public void mostrarMensajeFormatoDeCampos(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje);
 	}
 }

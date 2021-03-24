@@ -2,11 +2,11 @@ package dto;
 
 public class PersonaDTO {
 
-	private int idPersona, idTipoContacto, idLocalidad;
+	private Integer idPersona, idTipoContacto, idLocalidad;
 	private String nombre, telefono, calle, piso, altura, depto, email, fechaCumpleanios;
 
-	public PersonaDTO(int idPersona, String nombre, String telefono, String calle, String piso, String altura,
-			String depto, String email, String fechaCumpleanios, int idTipoContacto, int idLocalidad) {
+	public PersonaDTO(Integer idPersona, String nombre, String telefono, String calle, String piso, String altura,
+			String depto, String email, String fechaCumpleanios, Integer idTipoContacto, Integer idLocalidad) {
 		super();
 		this.idPersona = idPersona;
 		this.nombre = nombre;
@@ -21,19 +21,19 @@ public class PersonaDTO {
 		this.idLocalidad = idLocalidad;
 	}
 
-	public int getIdLocalidad() {
+	public Integer getIdLocalidad() {
 		return idLocalidad;
 	}
 
-	public void setIdLocalidad(int idLocalidad) {
+	public void setIdLocalidad(Integer idLocalidad) {
 		this.idLocalidad = idLocalidad;
 	}
 
-	public int getIdPersona() {
+	public Integer getIdPersona() {
 		return idPersona;
 	}
 
-	public void setIdPersona(int idPersona) {
+	public void setIdPersona(Integer idPersona) {
 		this.idPersona = idPersona;
 	}
 
@@ -101,11 +101,11 @@ public class PersonaDTO {
 		this.fechaCumpleanios = fechaCumpleanios;
 	}
 
-	public int getIdTipoContacto() {
+	public Integer getIdTipoContacto() {
 		return idTipoContacto;
 	}
 
-	public void setIdTipoContacto(int idTipoContacto) {
+	public void setIdTipoContacto(Integer idTipoContacto) {
 		this.idTipoContacto = idTipoContacto;
 	}
 
