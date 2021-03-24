@@ -3,7 +3,6 @@ package presentacion.vista;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -108,10 +107,5 @@ public class VistaTiposContacto extends JFrame {
 	public void cerrar() {
 		this.txtNombre.setText(null);
 		this.dispose();
-	}
-
-	public void mostrarMensajeError() {
-		JOptionPane.showMessageDialog(this,
-				"Debe cambiar el tipo de contacto de las personas que poseen este tipo de contacto para borrarlo.");
 	}
 }

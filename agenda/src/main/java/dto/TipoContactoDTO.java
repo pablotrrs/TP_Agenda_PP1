@@ -1,19 +1,19 @@
 package dto;
 
 public class TipoContactoDTO {
-	private int idTipoContacto;
+	private Integer idTipoContacto;
 	private String nombre;
 
-	public TipoContactoDTO(int idTipoContacto, String nombre) {
+	public TipoContactoDTO(Integer idTipoContacto, String nombre) {
 		this.idTipoContacto = idTipoContacto;
 		this.nombre = nombre;
 	}
 
-	public int getIdTipoContacto() {
+	public Integer getIdTipoContacto() {
 		return idTipoContacto;
 	}
 
-	public void setIdTipoContacto(int idTipoContacto) {
+	public void setIdTipoContacto(Integer idTipoContacto) {
 		this.idTipoContacto = idTipoContacto;
 	}
 
@@ -31,8 +31,8 @@ public class TipoContactoDTO {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + idTipoContacto;
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		return result;
