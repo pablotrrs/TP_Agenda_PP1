@@ -124,7 +124,8 @@ public class Controlador {
 	private void ventanaEditarPersona(ActionEvent a) {
 		if (this.vista.getTablaPersonas().getSelectedRows().length == 1) {
 
-			if (this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad() != null) {
+			if (!this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad()
+					.equals("Sin asignar")) {
 				LocalidadDTO localidad = localidadesById.get(
 						this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad());
 				if (localidad != null) {
@@ -132,7 +133,8 @@ public class Controlador {
 					PaisDTO pais = paisesById.get(provincia.getIdPais());
 					this.setComboBoxesValues(localidad, provincia, pais);
 				}
-			} else {
+			} else if (this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad()
+					.equals("Sin asignar")) {
 				this.setComboBoxesValues(null, null, null);
 			}
 			this.ventanaPersona.ApagarButton(this.ventanaPersona.getBtnAgregarPersona());
