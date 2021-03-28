@@ -304,15 +304,24 @@ public class Controlador {
 		if (this.localidad.existeLocalidad(localidad, idProvincia)) {
 			this.ventanaLocalidades.mostrarMensaje("Ya existe una localidad con ese nombre en la provincia!");
 			this.ventanaLocalidades.cerrar();
+			this.provincia.borrarProvincia(this.provincia.existeProvincia(idPais, provincia));
+			this.pais.borrarPais(this.pais.selectPais(pais).get(0));
+			
 			return ret;
 		} else if (!cumpleRegex(cp, "[A-Z]{1}[0-9]{4}[A-Z]{3}")) {
 			this.ventanaLocalidades.mostrarMensaje(
 					"El código postal debe ser de la forma C1663FDA (La primera letra es la provincia y las últimas 3 son para identificar la cara de la manzana).");
 			this.ventanaLocalidades.cerrar();
+			this.provincia.borrarProvincia(this.provincia.existeProvincia(idPais, provincia));
+			this.pais.borrarPais(this.pais.selectPais(pais).get(0));
+			
 			return ret;
 		} else if (cp.length() != 0 && this.localidad.obtenerLocalidad(cp) != null) {
 			this.ventanaLocalidades.mostrarMensaje("Ya existe una localidad con ese código postal!");
 			this.ventanaLocalidades.cerrar();
+			this.provincia.borrarProvincia(this.provincia.existeProvincia(idPais, provincia));
+			this.pais.borrarPais(this.pais.selectPais(pais).get(0));
+			
 			return ret;
 		} else {
 			if (editing) {
