@@ -16,4 +16,6 @@ public interface PaisDAO {
 	public List<PaisDTO> readAll();
 
 	public List<PaisDTO> selectPais(String pais_a_eliminar);
+
+	public PaisDTO selectById(int idPais);
 }

@@ -17,6 +17,7 @@ public class PersonaDAOSQL implements PersonaDAO {
 	private static final String delete = "DELETE FROM personas WHERE idPersona = ?";
 	private static final String readall = "SELECT * FROM personas";
 	private static final String readUsuarios = "SELECT * FROM personas WHERE usuario = ?";
+	private static final String eraseByLocalidad = "UPDATE personas SET idLocalidad = ? WHERE idLocalidad = ?";
 
 	public boolean insert(PersonaDTO persona) {
 		PreparedStatement statement;
@@ -180,5 +181,33 @@ public class PersonaDAOSQL implements PersonaDAO {
 		}
 
 		return personaNew;
+	}
+
+	@Override
+	public boolean updateByLocalidad(String nuevo, String localidad) {
+		PreparedStatement statement;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		boolean isUpdateExitoso = false;
+
+		try {
+			statement = conexion.prepareStatement(eraseByLocalidad);
+			statement.setString(1, nuevo);
+			statement.setString(2, localidad);
+
+			if (statement.executeUpdate() > 0) {
+				conexion.commit();
+				isUpdateExitoso = true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			try {
+				conexion.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		return isUpdateExitoso;
 	}
 }

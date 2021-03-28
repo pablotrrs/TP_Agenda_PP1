@@ -96,6 +96,7 @@ public class VistaLocalidades {
 	public String[] getNombreColumnas() {
 		return nombreColumnas;
 	}
+	
 
 	public void llenarTabla(List<Triplet<String, String, LocalidadDTO>> localidades) {
 		this.getModelLocalidades().setRowCount(0); // Para vaciar la tabla

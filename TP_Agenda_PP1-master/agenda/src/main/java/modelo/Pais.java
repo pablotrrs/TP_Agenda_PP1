@@ -35,4 +35,8 @@ public class Pais {
 	public List<PaisDTO> selectPais(String pais) {
 		return this.pais.selectPais(pais);
 	}
+
+	public PaisDTO selectById(int idPais) {
+		return this.pais.selectById(idPais);
+	}
 }
