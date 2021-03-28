@@ -17,6 +17,7 @@ public class PaisDAOSQL implements PaisDAO {
 	private static final String delete = "DELETE FROM paises WHERE idPais = ?";
 	private static final String readall = "SELECT * FROM paises";
 	private static final String select = "SELECT * FROM paises WHERE nombre = ?";
+	private static final String selectById = "SELECT * FROM paises WHERE idPais = ?";
 	private static final Conexion conexion = Conexion.getConexion();
 
 	@Override
@@ -122,6 +123,26 @@ public class PaisDAOSQL implements PaisDAO {
 		}
 
 		return paises;
+	}
+
+	public PaisDTO selectById(int idPais) {
+		PreparedStatement statement;
+		ResultSet resultSet; // Guarda el resultado de la query
+		PaisDTO pais = null;
+		try {
+			statement = conexion.getSQLConexion().prepareStatement(selectById);
+			statement.setInt(1, idPais);
+
+			resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+				pais = getPaisDTO(resultSet);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return pais;
 	}
 
 	@Override
