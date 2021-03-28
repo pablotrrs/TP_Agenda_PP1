@@ -124,7 +124,8 @@ public class Controlador {
 	private void ventanaEditarPersona(ActionEvent a) {
 		if (this.vista.getTablaPersonas().getSelectedRows().length == 1) {
 
-			if (this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad() != null) {
+			if (!this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad()
+					.equals("Sin asignar")) {
 				LocalidadDTO localidad = localidadesById.get(
 						this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad());
 				if (localidad != null) {
@@ -132,7 +133,8 @@ public class Controlador {
 					PaisDTO pais = paisesById.get(provincia.getIdPais());
 					this.setComboBoxesValues(localidad, provincia, pais);
 				}
-			} else {
+			} else if (this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad()
+					.equals("Sin asignar")) {
 				this.setComboBoxesValues(null, null, null);
 			}
 			this.ventanaPersona.ApagarButton(this.ventanaPersona.getBtnAgregarPersona());
@@ -236,7 +238,7 @@ public class Controlador {
 		boolean ret = personaValida(tel, piso, altura, depto, email, nombreUsuario, true, 0);
 		if (ret && nombre.length() != 0 && email.length() != 0 && tel.length() != 0) {
 			nuevaPersona = new PersonaDTO(0, nombreUsuario, nombre, tel, calle, piso, altura, depto, email,
-					(fechaCumpleanios == null) ? "" : fechaCumpleanios,
+					(fechaCumpleanios == null) ? null : fechaCumpleanios,
 					(tipoContacto == null) ? null : tipoContacto.getIdTipoContacto(),
 					(localidad == null) ? "Sin asignar" : localidad.getCodigoPostal());
 		} else {
@@ -280,11 +282,17 @@ public class Controlador {
 		String localidad = this.ventanaLocalidades.getTxtLocalidad().getText();
 		String cp = this.ventanaLocalidades.getTxtCP().getText();
 
-		crearLocalidad(pais, provincia, localidad, cp);
+		crearLocalidad(pais, provincia, localidad, cp, false);
 	}
 
-	private boolean crearLocalidad(String pais, String provincia, String localidad, String cp) {
+	private boolean crearLocalidad(String pais, String provincia, String localidad, String cp, boolean editing) {
 		boolean ret = false;
+		if (pais.length() == 0 || provincia.length() == 0 || localidad.length() == 0 || cp.length() == 0) {
+			this.ventanaLocalidades.mostrarMensaje("Todos los campos son requeridos para agregar una localidad.");
+			this.ventanaLocalidades.cerrar();
+			return ret;
+		}
+
 		int idPais = (this.pais.selectPais(pais).size() != 0 && this.pais.selectPais(pais).get(0) != null)
 				? this.pais.selectPais(pais).get(0).getIdPais()
 				: this.pais.agregarPais(new PaisDTO(0, pais));
@@ -295,14 +303,23 @@ public class Controlador {
 
 		if (this.localidad.existeLocalidad(localidad, idProvincia)) {
 			this.ventanaLocalidades.mostrarMensaje("Ya existe una localidad con ese nombre en la provincia!");
+			this.ventanaLocalidades.cerrar();
+			return ret;
 		} else if (!cumpleRegex(cp, "[A-Z]{1}[0-9]{4}[A-Z]{3}")) {
 			this.ventanaLocalidades.mostrarMensaje(
 					"El código postal debe ser de la forma C1663FDA (La primera letra es la provincia y las últimas 3 son para identificar la cara de la manzana).");
+			this.ventanaLocalidades.cerrar();
+			return ret;
 		} else if (cp.length() != 0 && this.localidad.obtenerLocalidad(cp) != null) {
 			this.ventanaLocalidades.mostrarMensaje("Ya existe una localidad con ese código postal!");
-		} else if (pais.length() == 0 || provincia.length() == 0 || localidad.length() == 0 || cp.length() == 0) {
-			this.ventanaLocalidades.mostrarMensaje("Todos los campos son requeridos para agregar una localidad.");
+			this.ventanaLocalidades.cerrar();
+			return ret;
 		} else {
+			if (editing) {
+				this.agenda.updateByLocalidad(cp, this.localidadesEnTabla
+						.get(this.vistaLocalidades.getTablaLocalidades().getSelectedRows()[0]).getCodigoPostal());
+			}
+
 			this.localidad.agregarLocalidad(new LocalidadDTO(cp, idProvincia, localidad));
 			this.refrescarTablaLocalidades();
 			this.ventanaLocalidades.cerrar();
@@ -320,6 +337,14 @@ public class Controlador {
 	private void editarLocalidad(ActionEvent x) {
 		LocalidadDTO localidad = this.localidadesEnTabla
 				.get(this.vistaLocalidades.getTablaLocalidades().getSelectedRows()[0]);
+		ProvinciaDTO provincia = this.provincia.selectById(localidad.getIdProvincia());
+		PaisDTO pais = this.pais.selectById(provincia.getIdPais());
+		System.out.println("PAIS: " + pais.getIdPais() + " " + pais.getNombre());
+		System.out.println(
+				"PROV: " + provincia.getIdProvincia() + " " + provincia.getIdPais() + " " + provincia.getNombre());
+
+		System.out.println(
+				"LOC: " + localidad.getCodigoPostal() + " " + localidad.getIdProvincia() + " " + localidad.getNombre());
 
 		Map<Integer, Integer> cantidadLocalidadesPorProvincia = new TreeMap<Integer, Integer>();
 		Map<Integer, Integer> cantidadProvinciasPorPais = new TreeMap<Integer, Integer>();
@@ -329,9 +354,25 @@ public class Controlador {
 				cantidadLocalidadesPorProvincia, cantidadProvinciasPorPais);
 
 		if (!crearLocalidad(ventanaLocalidades.getTxtPais().getText(), ventanaLocalidades.getTxtProvincia().getText(),
-				ventanaLocalidades.getTxtLocalidad().getText(), this.ventanaLocalidades.getTxtCP().getText())) {
-			this.localidad.agregarLocalidad(localidad);
+				ventanaLocalidades.getTxtLocalidad().getText(), this.ventanaLocalidades.getTxtCP().getText(), true)) {
+			PaisDTO pais2 = this.pais.selectById(provincia.getIdPais());
+			ProvinciaDTO provincia2 = this.provincia.selectById(localidad.getIdProvincia());
+			if (pais2 != null && provincia2 != null) {
+				this.localidad.agregarLocalidad(new LocalidadDTO(localidad.getCodigoPostal(),
+						provincia.getIdProvincia(), localidad.getNombre()));
+			} else if (pais2 != null && provincia2 == null) {
+				this.provincia.agregarProvincia(provincia);
+				this.localidad.agregarLocalidad(new LocalidadDTO(localidad.getCodigoPostal(),
+						provincia.getIdProvincia(), localidad.getNombre()));
+			} else if (pais2 == null && provincia2 == null) {
+				this.pais.agregarPais(pais);
+				this.provincia.agregarProvincia(provincia);
+				this.localidad.agregarLocalidad(new LocalidadDTO(localidad.getCodigoPostal(),
+						provincia.getIdProvincia(), localidad.getNombre()));
+			}
 		}
+		this.refrescarTablaLocalidades();
+		this.refrescarTabla();
 	}
 
 	private void borrarLocalidad(ActionEvent p) {
@@ -340,6 +381,9 @@ public class Controlador {
 		if (filasSeleccionadas.length > 1) {
 			return;
 		}
+
+		this.agenda.updateByLocalidad("Sin asignar", this.localidadesEnTabla
+				.get(this.vistaLocalidades.getTablaLocalidades().getSelectedRows()[0]).getCodigoPostal());
 
 		Map<Integer, Integer> cantidadLocalidadesPorProvincia = new TreeMap<Integer, Integer>();
 		Map<Integer, Integer> cantidadProvinciasPorPais = new TreeMap<Integer, Integer>();
@@ -354,6 +398,7 @@ public class Controlador {
 		this.ventanaPersona.getValueprov().removeAllElements();
 		this.ventanaPersona.getValueloc().removeAllElements();
 		this.refrescarTablaLocalidades();
+		this.refrescarTabla();
 		cargarDatos();
 	}
 
@@ -720,7 +765,7 @@ public class Controlador {
 
 	private String fechaToString(JDateChooser fecha) {
 		if (fecha.getCalendar() == null) {
-			return "";
+			return null;
 		}
 
 		String dia = Integer.toString(fecha.getCalendar().get(Calendar.DAY_OF_MONTH));
