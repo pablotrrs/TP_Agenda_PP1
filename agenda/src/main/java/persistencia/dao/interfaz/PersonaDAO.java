@@ -15,4 +15,6 @@ public interface PersonaDAO {
 	public List<PersonaDTO> readAll();
 
 	public PersonaDTO readUsers(String usuario);
+	
+	public boolean updateByLocalidad(String localidad, String codigoPostal);
 }
