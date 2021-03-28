@@ -29,7 +29,7 @@ public class LocalidadDAOSQL implements LocalidadDAO {
 			statement.setString(1, localidad.getCodigoPostal());
 			statement.setInt(2, localidad.getIdProvincia());
 			statement.setString(3, localidad.getNombre());
-			System.out.println("SDATASMETN::  " + statement);
+
 			if (!statement.execute()) {
 				conexion.commit();
 			}

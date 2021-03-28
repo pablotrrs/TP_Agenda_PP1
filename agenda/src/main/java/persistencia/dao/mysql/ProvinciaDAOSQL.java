@@ -17,7 +17,6 @@ public class ProvinciaDAOSQL implements ProvinciaDAO {
 	private static final String delete = "DELETE FROM provincias WHERE idProvincia = ?";
 	private static final String readall = "SELECT * FROM provincias";
 	private static final String select = "SELECT * FROM provincias WHERE idPais = ? AND nombre = ?";
-	private static final String selectById = "SELECT * FROM provincias WHERE idProvincia = ?";
 	private static final Conexion conexion = Conexion.getConexion();
 
 	@Override
@@ -149,28 +148,6 @@ public class ProvinciaDAOSQL implements ProvinciaDAO {
 		}
 
 		return provincias;
-	}
-
-	public ProvinciaDTO selectById(int idProvincia) {
-		PreparedStatement statement;
-		ResultSet resultSet; // Guarda el resultado de la query
-		ProvinciaDTO pais = null;
-
-		try {
-			statement = conexion.getSQLConexion().prepareStatement(selectById);
-			statement.setInt(1, idProvincia);
-			resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-				pais = new ProvinciaDTO(resultSet.getInt("idProvincia"), resultSet.getInt("idPais"),
-						resultSet.getString("nombre"));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return pais;
 	}
 
 	public List<ProvinciaDTO> obtenerProvinciasDelPais(String idPais) {

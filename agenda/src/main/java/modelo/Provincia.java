@@ -39,8 +39,4 @@ public class Provincia {
 	public List<ProvinciaDTO> obtenerProvinciasDelPais(String idPais){
 		return this.provincia.obtenerProvinciasDelPais(idPais);
 	}
-
-	public ProvinciaDTO selectById(int idProvincia) {
-		return this.provincia.selectById(idProvincia);
-	}
 }

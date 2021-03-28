@@ -18,6 +18,4 @@ public interface ProvinciaDAO {
 	public List<ProvinciaDTO> obtenerProvinciasDelPais(String idPais);
 
 	public ProvinciaDTO existeProvincia(int idPais, String provincia);
-
-	public ProvinciaDTO selectById(int idProvincia);
 }

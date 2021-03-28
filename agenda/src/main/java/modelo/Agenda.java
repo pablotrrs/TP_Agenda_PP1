@@ -31,8 +31,4 @@ public class Agenda {
 	public PersonaDTO obtenerNombresLinkedin(String usuario) {
 		return this.persona.readUsers(usuario);
 	}
-
-	public boolean updateByLocalidad(String nuevo, String codigoPostal) {
-		return this.persona.updateByLocalidad(nuevo, codigoPostal);
-	}
 }
