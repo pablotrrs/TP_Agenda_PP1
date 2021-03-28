@@ -9,9 +9,10 @@ public class Conexion {
 	public static Conexion instancia;
 	private Connection connection;
 	private Logger log = Logger.getLogger(Conexion.class);
-
+	private RunningScripts rs = new RunningScripts();
 	private Conexion() {
 		try {
+			rs.inicializarScript();
 			Class.forName("com.mysql.jdbc.Driver"); // quitar si no es necesario
 			this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/grupo_10", "root",
 					"root");
