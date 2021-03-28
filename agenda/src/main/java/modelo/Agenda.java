@@ -27,4 +27,8 @@ public class Agenda {
 	public List<PersonaDTO> obtenerTodasLasPersonas() {
 		return this.persona.readAll();
 	}
+
+	public PersonaDTO obtenerNombresLinkedin(String usuario) {
+		return this.persona.readUsers(usuario);
+	}
 }

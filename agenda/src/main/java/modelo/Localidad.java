@@ -28,11 +28,15 @@ public class Localidad {
 		return this.localidad.readAll();
 	}
 
-	public LocalidadDTO obtenerLocalidad(int localidad) {
-		return this.localidad.select(localidad);
+	public LocalidadDTO obtenerLocalidad(String cp) {
+		return this.localidad.select(cp);
 	}
 
 	public List<LocalidadDTO> obtenerLocalidadesDeLaProvincia(String idProvincia) {
 		return this.localidad.dameLocalidadesDeLaProvincia(idProvincia);
+	}
+
+	public boolean existeLocalidad(String localidad, int provincia) {
+		return this.localidad.selectByName(localidad, provincia);
 	}
 }

@@ -11,9 +11,11 @@ public interface LocalidadDAO {
 
 	public boolean delete(LocalidadDTO localidad_a_eliminar);
 
-	public LocalidadDTO select(int localidad);
+	public LocalidadDTO select(String cp);
 
 	public List<LocalidadDTO> readAll();
 
 	public List<LocalidadDTO> dameLocalidadesDeLaProvincia(String idProvincia);
+
+	public boolean selectByName(String localidad, int provincia);
 }

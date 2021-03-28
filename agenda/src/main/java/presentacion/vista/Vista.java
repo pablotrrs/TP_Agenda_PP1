@@ -30,7 +30,7 @@ public class Vista {
 	private JButton btnABMtiposContacto;
 	private JButton btnABMlocalidades;
 	private DefaultTableModel modelPersonas;
-	private String[] nombreColumnas = { "Nombre y apellido", "Teléfono", "Domicilio", "Localidad", "Email",
+	private String[] nombreColumnas = { "Nombre y apellido", "Teléfono", "Domicilio", "Localidad", "Email", "Usuario LinkedIn",
 			"Fecha de Cumpleaños", "Tipo de Contacto" };
 
 	public Vista() {
@@ -150,7 +150,7 @@ public class Vista {
 	}
 
 	public void llenarTabla(List<Pair<String, PersonaDTO>> personas2, Map<Integer, ProvinciaDTO> provinciasById,
-			Map<Integer, String> tiposDeContactosByIds, Map<Integer, LocalidadDTO> localidadesById,
+			Map<Integer, String> tiposDeContactosByIds, Map<String, LocalidadDTO> localidadesById,
 			Map<Integer, PaisDTO> paisesById) {
 		this.getModelPersonas().setRowCount(0); // Para vaciar la tabla
 		this.getModelPersonas().setColumnCount(0);
@@ -165,17 +165,19 @@ public class Vista {
 					+ ubicacionEdificio;
 			String email = persona.getValue1().getEmail();
 			String fechaCumpleanios = persona.getValue1().getFechaCumpleanios();
-
+			String nombreUsuario = persona.getValue1().getNombreUsuario();
 			String locadlidadFull = "";
 			
 			if (persona.getValue1().getIdLocalidad() != null) {
 				LocalidadDTO localidad = localidadesById.get(persona.getValue1().getIdLocalidad());
-				ProvinciaDTO provincia = provinciasById.get(localidad.getIdProvincia());
-				PaisDTO pais = paisesById.get(provincia.getIdPais());
-				locadlidadFull = localidad.getNombre() + ", " + provincia.getNombre() + ", " + pais.getNombre() + ".";
+				if(localidad != null) {
+					ProvinciaDTO provincia = provinciasById.get(localidad.getIdProvincia());
+					PaisDTO pais = paisesById.get(provincia.getIdPais());
+					locadlidadFull = localidad.getNombre() + ", " + provincia.getNombre() + ", " + pais.getNombre() + ".";	
+				}
 			}
 
-			Object[] fila = { nombre, tel, domicilio, locadlidadFull, email, fechaCumpleanios, persona.getValue0() };
+			Object[] fila = { nombre, tel, domicilio, locadlidadFull, email, nombreUsuario, fechaCumpleanios, persona.getValue0() };
 
 			this.getModelPersonas().addRow(fila);
 		}

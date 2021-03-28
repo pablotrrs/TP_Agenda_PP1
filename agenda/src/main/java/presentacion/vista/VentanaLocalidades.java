@@ -4,7 +4,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import org.javatuples.Triplet;
+
+import dto.LocalidadDTO;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.util.List;
 import javax.swing.JButton;
@@ -19,6 +23,7 @@ public class VentanaLocalidades extends JFrame {
 	private JTextField txtLocalidad;
 	private JButton btnAgregar;
 	private JButton btnEditar;
+	private JTextField txtCP;
 
 	public static VentanaLocalidades getInstance() {
 		if (INSTANCE == null) {
@@ -32,18 +37,18 @@ public class VentanaLocalidades extends JFrame {
 		super();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 294, 205);
+		setBounds(100, 100, 308, 262);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 340, 102);
+		panel.setBounds(10, 11, 272, 136);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
-		JLabel lblPais = new JLabel("Pais");
+		JLabel lblPais = new JLabel("Pa\u00EDs");
 		lblPais.setBounds(10, 11, 86, 14);
 		panel.add(lblPais);
 
@@ -70,12 +75,21 @@ public class VentanaLocalidades extends JFrame {
 		panel.add(txtLocalidad);
 		txtLocalidad.setColumns(10);
 
+		JLabel lblCodigoPostal = new JLabel("C\u00F3digo Postal");
+		lblCodigoPostal.setBounds(10, 111, 107, 14);
+		panel.add(lblCodigoPostal);
+
+		txtCP = new JTextField();
+		txtCP.setColumns(10);
+		txtCP.setBounds(123, 108, 139, 20);
+		panel.add(txtCP);
+
 		btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(99, 124, 89, 23);
+		btnAgregar.setBounds(99, 158, 89, 23);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("Actualizar");
-		btnEditar.setBounds(89, 124, 106, 23);
+		btnEditar.setBounds(88, 158, 106, 23);
 		contentPane.add(btnEditar);
 
 		this.setVisible(false);
@@ -113,6 +127,14 @@ public class VentanaLocalidades extends JFrame {
 		return btnEditar;
 	}
 
+	public JTextField getTxtCP() {
+		return txtCP;
+	}
+
+	public void setTxtCP(JTextField txtCP) {
+		this.txtCP = txtCP;
+	}
+
 	public void mostrarVentanaLocalidades() {
 		this.setVisible(true);
 	}
@@ -128,12 +150,14 @@ public class VentanaLocalidades extends JFrame {
 		txtPais.setText("");
 		txtProvincia.setText("");
 		txtLocalidad.setText("");
+		txtCP.setText("");
 	}
 
-	public void llenarCamposLocalidad(List<Triplet<String, String, String>> localidades) {
-		txtPais.setText(localidades.get(0).getValue0());
-		txtProvincia.setText(localidades.get(0).getValue1());
-		txtLocalidad.setText(localidades.get(0).getValue2());
+	public void llenarCamposLocalidad(List<Triplet<String, String, LocalidadDTO>> list) {
+		txtPais.setText(list.get(0).getValue0());
+		txtProvincia.setText(list.get(0).getValue1());
+		txtLocalidad.setText(list.get(0).getValue2().getNombre());
+		txtCP.setText(String.valueOf(list.get(0).getValue2().getCodigoPostal()));
 	}
 
 	public void cambiarTituloAEditar() {
@@ -150,5 +174,9 @@ public class VentanaLocalidades extends JFrame {
 
 	public void ApagarButton(JButton btn) {
 		btn.setVisible(false);
+	}
+
+	public void mostrarMensaje(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje);
 	}
 }
