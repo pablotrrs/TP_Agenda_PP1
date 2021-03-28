@@ -1,22 +1,22 @@
 package dto;
 
 public class LocalidadDTO {
-	private int idLocalidad, idProvincia;
-	private String nombre;
+	private int idProvincia;
+	private String nombre, codigoPostal;
 
-	public LocalidadDTO(int idLocalidad, int idProvincia, String nombre) {
+	public LocalidadDTO(String codigoPostal, int idProvincia, String nombre) {
 		super();
-		this.idLocalidad = idLocalidad;
+		this.codigoPostal = codigoPostal;
 		this.idProvincia = idProvincia;
 		this.nombre = nombre;
 	}
 
-	public int getIdLocalidad() {
-		return idLocalidad;
+	public String getCodigoPostal() {
+		return codigoPostal;
 	}
 
-	public void setIdLocalidad(int idLocalidad) {
-		this.idLocalidad = idLocalidad;
+	public void setCodigoPostal(String codigoPostal) {
+		this.codigoPostal = codigoPostal;
 	}
 
 	public int getIdProvincia() {
@@ -44,7 +44,7 @@ public class LocalidadDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + idLocalidad;
+		result = prime * result + ((codigoPostal == null) ? 0 : codigoPostal.hashCode());
 		result = prime * result + idProvincia;
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		return result;
@@ -59,7 +59,10 @@ public class LocalidadDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		LocalidadDTO other = (LocalidadDTO) obj;
-		if (idLocalidad != other.idLocalidad)
+		if (codigoPostal == null) {
+			if (other.codigoPostal != null)
+				return false;
+		} else if (!codigoPostal.equals(other.codigoPostal))
 			return false;
 		if (idProvincia != other.idProvincia)
 			return false;

@@ -108,4 +108,5 @@ public class VistaTiposContacto extends JFrame {
 		this.txtNombre.setText(null);
 		this.dispose();
 	}
+	
 }

@@ -22,7 +22,7 @@ public class VentanaPersona extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtNombre;
-	private JTextField txtTelefono, txtCalle, txtPiso, txtAltura, txtDepto;
+	private JTextField txtTelefono, txtCalle, txtPiso, txtAltura, txtDepto, txtUsuario;
 	private JDateChooser fecha_cumpleaños;
 	private JButton btnAgregarPersona;
 	private JButton btnEditar;
@@ -38,6 +38,7 @@ public class VentanaPersona extends JFrame {
 	private JComboBox<ProvinciaDTO> comboBox_provincia;
 	private JLabel lblLocalidad;
 	private JComboBox<LocalidadDTO> comboBox_localidad;
+	
 
 	public static VentanaPersona getInstance() {
 		if (INSTANCE == null) {
@@ -52,14 +53,14 @@ public class VentanaPersona extends JFrame {
 		setBackground(Color.WHITE);
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 376, 494);
+		setBounds(100, 100, 376, 539);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 340, 396);
+		panel.setBounds(10, 11, 340, 416);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -174,13 +175,22 @@ public class VentanaPersona extends JFrame {
 		valueloc = new DefaultComboBoxModel<LocalidadDTO>();
 		comboBox_localidad.setModel(valueloc);
 		panel.add(comboBox_localidad);
+		
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setBounds(10, 391, 46, 14);
+		panel.add(lblUsuario);
+		
+		txtUsuario = new JTextField();
+		txtUsuario.setBounds(166, 388, 164, 20);
+		panel.add(txtUsuario);
+		txtUsuario.setColumns(10);
 
 		btnAgregarPersona = new JButton("Agregar");
-		btnAgregarPersona.setBounds(236, 418, 89, 23);
+		btnAgregarPersona.setBounds(236, 451, 89, 23);
 		contentPane.add(btnAgregarPersona);
 
 		btnEditar = new JButton("Actualizar");
-		btnEditar.setBounds(215, 418, 110, 23);
+		btnEditar.setBounds(215, 451, 110, 23);
 		contentPane.add(btnEditar);
 
 		this.setVisible(false);
@@ -194,6 +204,7 @@ public class VentanaPersona extends JFrame {
 		txtAltura.setText(persona.getAltura());
 		txtPiso.setText(persona.getPiso());
 		txtDepto.setText(persona.getDepto());
+		txtUsuario.setText(persona.getNombreUsuario());
 		toStringFechaInverso(fecha_cumpleaños, persona.getFechaCumpleanios());
 		comboBox_tipo_contacto.setSelectedItem(tipoContactoDTO);
 	}
@@ -218,6 +229,7 @@ public class VentanaPersona extends JFrame {
 		txtAltura.setText("");
 		txtPiso.setText("");
 		txtDepto.setText("");
+		txtUsuario.setText("");
 		comboBox_tipo_contacto.setSelectedIndex(-1);
 		comboBox_pais.setSelectedIndex(-1);
 		comboBox_provincia.setSelectedIndex(-1);
@@ -291,6 +303,9 @@ public class VentanaPersona extends JFrame {
 	public JTextField getTxtEmail() {
 		return txtEmail;
 	}
+	public JTextField getTxtUsuario() {
+		return txtUsuario;
+	}
 
 	public JButton getBtnAgregarPersona() {
 		return btnAgregarPersona;
@@ -337,7 +352,7 @@ public class VentanaPersona extends JFrame {
 	}
 
 	public void mostrarMensajeCamposRequeridos() {
-		JOptionPane.showMessageDialog(this, "Para agregar una persona que debe indicar: Nombre, teléfono y Email.");
+		JOptionPane.showMessageDialog(this, "Para agregar una persona debe indicar: Nombre, teléfono y Email.");
 	}
 
 	public void mostrarMensajeFormatoDeCampos(String mensaje) {
