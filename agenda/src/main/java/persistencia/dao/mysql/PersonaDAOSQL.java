@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import persistencia.conexion.Conexion;
@@ -32,8 +33,16 @@ public class PersonaDAOSQL implements PersonaDAO {
 			statement.setString(7, persona.getDepto());
 			statement.setString(8, persona.getEmail());
 			statement.setString(9, persona.getFechaCumpleanios());
-			statement.setInt(10, persona.getIdTipoContacto());
-			statement.setInt(11, persona.getIdLocalidad());
+			if (persona.getIdTipoContacto() != null) {
+				statement.setInt(10, persona.getIdTipoContacto());
+			} else {
+				statement.setNull(10, Types.INTEGER);
+			}
+			if (persona.getIdLocalidad() != null) {
+				statement.setInt(11, persona.getIdLocalidad());
+			} else {
+				statement.setNull(11, Types.INTEGER);
+			}
 
 			if (statement.executeUpdate() > 0) {
 				conexion.commit();
@@ -67,8 +76,16 @@ public class PersonaDAOSQL implements PersonaDAO {
 			statement.setString(6, persona.getDepto());
 			statement.setString(7, persona.getEmail());
 			statement.setString(8, persona.getFechaCumpleanios());
-			statement.setInt(9, persona.getIdTipoContacto());
-			statement.setInt(10, persona.getIdLocalidad());
+			if (persona.getIdTipoContacto() != null) {
+				statement.setInt(9, persona.getIdTipoContacto());
+			} else {
+				statement.setNull(9, Types.INTEGER);
+			}
+			if (persona.getIdLocalidad() != null) {
+				statement.setInt(10, persona.getIdLocalidad());
+			} else {
+				statement.setNull(10, Types.INTEGER);
+			}
 			statement.setInt(11, persona.getIdPersona());
 
 			if (statement.executeUpdate() > 0) {
@@ -125,8 +142,9 @@ public class PersonaDAOSQL implements PersonaDAO {
 	}
 
 	private PersonaDTO getPersonaDTO(ResultSet resultSet) throws SQLException {
-		int id = resultSet.getInt("idPersona"), idTipoContacto = resultSet.getInt("idTipoContacto"),
-				idLocalidad = resultSet.getInt("idLocalidad");
+		int id = resultSet.getInt("idPersona");
+		Integer idTipoContacto = (resultSet.getInt("idTipoContacto") == 0) ? null : resultSet.getInt("idTipoContacto"),
+				idLocalidad = (resultSet.getInt("idLocalidad") == 0) ? null : resultSet.getInt("idLocalidad");
 		String nombre = resultSet.getString("Nombre"), tel = resultSet.getString("Telefono"),
 				calle = resultSet.getString("calle"), piso = resultSet.getString("piso"),
 				altura = resultSet.getString("altura"), depto = resultSet.getString("depto"),

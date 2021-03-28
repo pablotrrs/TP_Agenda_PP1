@@ -49,8 +49,6 @@ public class VentanasTiposContacto {
 
 		tablaTiposContacto.getColumnModel().getColumn(0).setPreferredWidth(103);
 		tablaTiposContacto.getColumnModel().getColumn(0).setResizable(false);
-		// tablaTiposContacto.getColumnModel().getColumn(1).setPreferredWidth(100);
-		// tablaTiposContacto.getColumnModel().getColumn(1).setResizable(false);
 
 		spTiposContacto.setViewportView(tablaTiposContacto);
 
