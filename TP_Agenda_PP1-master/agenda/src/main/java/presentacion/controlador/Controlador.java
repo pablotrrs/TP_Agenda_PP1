@@ -637,18 +637,20 @@ public class Controlador {
 		List<String> usuarios = new ArrayList<String>();
 		for (RegistrarPersonaDTO rs : this.registrar.obtenerTodosLosUsers()) {
 			usuarios.add(rs.getNombre());
-			// System.out.println(rs.getNombre());
 
 		}
 
 		for (RegistrarPersonaDTO rp : this.registrar.obtenerTodosLosRegistrados()) {
 			nombresRegistrados.put(rp.getNombre(), rp.getPassword());
 		}
+		
+		
 		if (usuarios.contains(posibleUsuario.getNombre())
-				&& !nombresRegistrados.containsKey(posibleUsuario.getNombre())) {
-			this.inicializarAll();
-
-			ventanaLogin.cerrar();
+				&& !nombresRegistrados.containsKey(posibleUsuario.getNombre()) && !posibleUsuario.getNombre().equals("root")) {
+			this.registrar.eliminarUsuario(posibleUsuario);
+			
+			ventanaLogin.mensajeError();
+		
 
 		} else if (nombresRegistrados.containsKey(posibleUsuario.getNombre())
 				&& nombresRegistrados.containsValue(posibleUsuario.getPassword())) {
@@ -657,7 +659,12 @@ public class Controlador {
 
 			ventanaLogin.cerrar();
 
-		} else
+		} else if (usuarios.contains(posibleUsuario.getNombre()) && posibleUsuario.getNombre().equals("root")) {
+			this.inicializarAll();
+			ventanaLogin.cerrar();
+		} 
+		
+		else
 			ventanaLogin.mensajeError();
 
 	}
