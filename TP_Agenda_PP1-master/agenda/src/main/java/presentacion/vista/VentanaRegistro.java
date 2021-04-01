@@ -65,7 +65,7 @@ public class VentanaRegistro extends JFrame {
 		textPassword.setBounds(66, 54, 164, 20);
 		panel.add(textPassword);
 		
-		JLabel lblvista = new JLabel("Registar Persona");
+		JLabel lblvista = new JLabel("Registrar Usuario");
 		lblvista.setFont(new Font("Yu Gothic Light", Font.PLAIN, 19));
 		lblvista.setBounds(82, 23, 148, 37);
 		contentPane.add(lblvista);
@@ -98,7 +98,7 @@ public class VentanaRegistro extends JFrame {
 		this.textPassword = textPassword;
 	}
 	public void ponerTitulo() {
-		this.setTitle("Registrar Persona");
+		this.setTitle("Registrar Usuario");
 	}
 		
 	public void mostrarVentanaRegistro() {
