@@ -111,6 +111,7 @@ public class Controlador {
 	private void ventanaRegistrar(ActionEvent b) {
 		this.ventanaLogin.cerrar();
 		this.inicializarRegistro();
+		this.ventanaRegistro.ponerTitulo();
 		this.ventanaRegistro.vaciarCamposRegistro();
 
 	}
@@ -119,6 +120,7 @@ public class Controlador {
 		this.ventanaRegistro.cerrar();
 		this.ventanaLogin.vaciarCamposLogin();
 		this.ventanaLogin.mostrarVentanaLogin();
+		this.ventanaLogin.ponerTitulo();
 	}
 
 	private void ventanaEditarPersona(ActionEvent a) {
@@ -868,6 +870,7 @@ public class Controlador {
 	}
 
 	public void inicializar() {
+		this.ventanaLogin.ponerTitulo();
 		this.ventanaLogin.mostrarVentanaLogin();
 	}
 
