@@ -115,6 +115,9 @@ public class VentanaLogin extends JFrame{
 	public void setTextNombre(JTextField textNombre) {
 		this.textNombre = textNombre;
 	}
+	public void ponerTitulo() {
+		this.setTitle("Iniciar Sesión");
+	}
 
 	public JTextField getTextPassword() {
 		return textPassword;
