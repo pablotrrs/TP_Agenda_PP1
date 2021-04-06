@@ -101,6 +101,8 @@ public class Controlador {
 	}
 
 	private void ventanaAgregarPersona(ActionEvent a) {
+		this.ventanaPersona.getValueprov().removeAllElements();
+		this.ventanaPersona.getValueloc().removeAllElements();
 		this.ventanaPersona.vaciarCampos();
 		this.ventanaPersona.cambiarTituloAagregar();
 		this.ventanaPersona.ApagarButton(ventanaPersona.getBtnEditar());
@@ -125,6 +127,8 @@ public class Controlador {
 
 	private void ventanaEditarPersona(ActionEvent a) {
 		if (this.vista.getTablaPersonas().getSelectedRows().length == 1) {
+			this.ventanaPersona.getValueprov().removeAllElements();
+			this.ventanaPersona.getValueloc().removeAllElements();
 
 			if (!this.personasEnTabla.get(this.vista.getTablaPersonas().getSelectedRows()[0]).getIdLocalidad()
 					.equals("Sin asignar")) {
