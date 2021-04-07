@@ -292,16 +292,24 @@ public class Controlador {
 	}
 
 	private boolean crearLocalidad(String pais, String provincia, String localidad, String cp, boolean editing) {
-		boolean ret = false;
+		boolean ret = false, paisYaExistia = false, provinciaYaExistia = false;
 		if (pais.length() == 0 || provincia.length() == 0 || localidad.length() == 0 || cp.length() == 0) {
 			this.ventanaLocalidades.mostrarMensaje("Todos los campos son requeridos para agregar una localidad.");
 			this.ventanaLocalidades.cerrar();
 			return ret;
 		}
 
+		if (this.pais.selectPais(pais).size() != 0 && this.pais.selectPais(pais).get(0) != null) {
+			paisYaExistia = true;
+		}
+
 		int idPais = (this.pais.selectPais(pais).size() != 0 && this.pais.selectPais(pais).get(0) != null)
 				? this.pais.selectPais(pais).get(0).getIdPais()
 				: this.pais.agregarPais(new PaisDTO(0, pais));
+
+		if (this.provincia.existeProvincia(idPais, provincia) != null) {
+			provinciaYaExistia = true;
+		}
 
 		int idProvincia = (this.provincia.existeProvincia(idPais, provincia) != null)
 				? this.provincia.existeProvincia(idPais, provincia).getIdProvincia()
@@ -310,24 +318,18 @@ public class Controlador {
 		if (this.localidad.existeLocalidad(localidad, idProvincia)) {
 			this.ventanaLocalidades.mostrarMensaje("Ya existe una localidad con ese nombre en la provincia!");
 			this.ventanaLocalidades.cerrar();
-			this.provincia.borrarProvincia(this.provincia.existeProvincia(idPais, provincia));
-			this.pais.borrarPais(this.pais.selectPais(pais).get(0));
-			
+			eliminarBasura(pais, provincia, paisYaExistia, provinciaYaExistia, idPais);
 			return ret;
 		} else if (!cumpleRegex(cp, "[A-Z]{1}[0-9]{4}[A-Z]{3}")) {
 			this.ventanaLocalidades.mostrarMensaje(
 					"El código postal debe ser de la forma C1663FDA (La primera letra es la provincia y las últimas 3 son para identificar la cara de la manzana).");
 			this.ventanaLocalidades.cerrar();
-			this.provincia.borrarProvincia(this.provincia.existeProvincia(idPais, provincia));
-			this.pais.borrarPais(this.pais.selectPais(pais).get(0));
-			
+			eliminarBasura(pais, provincia, paisYaExistia, provinciaYaExistia, idPais);
 			return ret;
 		} else if (cp.length() != 0 && this.localidad.obtenerLocalidad(cp) != null) {
 			this.ventanaLocalidades.mostrarMensaje("Ya existe una localidad con ese código postal!");
 			this.ventanaLocalidades.cerrar();
-			this.provincia.borrarProvincia(this.provincia.existeProvincia(idPais, provincia));
-			this.pais.borrarPais(this.pais.selectPais(pais).get(0));
-			
+			eliminarBasura(pais, provincia, paisYaExistia, provinciaYaExistia, idPais);
 			return ret;
 		} else {
 			if (editing) {
@@ -347,6 +349,16 @@ public class Controlador {
 		}
 
 		return ret;
+	}
+
+	private void eliminarBasura(String pais, String provincia, boolean paisYaExistia, boolean provinciaYaExistia,
+			int idPais) {
+		if (!provinciaYaExistia) {
+			this.provincia.borrarProvincia(this.provincia.existeProvincia(idPais, provincia));
+		}
+		if (!paisYaExistia) {
+			this.pais.borrarPais(this.pais.selectPais(pais).get(0));
+		}
 	}
 
 	private void editarLocalidad(ActionEvent x) {
@@ -649,14 +661,12 @@ public class Controlador {
 		for (RegistrarPersonaDTO rp : this.registrar.obtenerTodosLosRegistrados()) {
 			nombresRegistrados.put(rp.getNombre(), rp.getPassword());
 		}
-		
-		
-		if (usuarios.contains(posibleUsuario.getNombre())
-				&& !nombresRegistrados.containsKey(posibleUsuario.getNombre()) && !posibleUsuario.getNombre().equals("root")) {
+
+		if (usuarios.contains(posibleUsuario.getNombre()) && !nombresRegistrados.containsKey(posibleUsuario.getNombre())
+				&& !posibleUsuario.getNombre().equals("root")) {
 			this.registrar.eliminarUsuario(posibleUsuario);
-			
+
 			ventanaLogin.mensajeError();
-		
 
 		} else if (nombresRegistrados.containsKey(posibleUsuario.getNombre())
 				&& nombresRegistrados.containsValue(posibleUsuario.getPassword())) {
@@ -668,8 +678,8 @@ public class Controlador {
 		} else if (usuarios.contains(posibleUsuario.getNombre()) && posibleUsuario.getNombre().equals("root")) {
 			this.inicializarAll();
 			ventanaLogin.cerrar();
-		} 
-		
+		}
+
 		else
 			ventanaLogin.mensajeError();
 
