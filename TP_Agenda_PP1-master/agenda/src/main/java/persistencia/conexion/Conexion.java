@@ -15,7 +15,7 @@ public class Conexion {
 			rs.inicializarScript();
 			Class.forName("com.mysql.jdbc.Driver"); // quitar si no es necesario
 			this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/grupo_10", "root",
-					"root");
+					"");
 			this.connection.setAutoCommit(false);
 			log.info("Conexión exitosa");
 		} catch (Exception e) {

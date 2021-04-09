@@ -14,5 +14,7 @@ public interface RegistrarPersonaDAO {
 
 	public boolean delete(RegistrarPersonaDTO persona_a_borrar);
 	
+	public boolean updateUser(RegistrarPersonaDTO persona_a_actualizar);
+	
 	public List<RegistrarPersonaDTO> readUsers();
 }

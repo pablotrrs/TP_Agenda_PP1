@@ -2,6 +2,7 @@ package presentacion.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -552,7 +553,7 @@ public class Controlador {
 
 	private void registrarPersona(ActionEvent s) {
 		RegistrarPersonaDTO persona_a_registrar = new RegistrarPersonaDTO(
-				this.ventanaRegistro.getTextNombre().getText(), this.ventanaRegistro.passwordToString());
+				this.ventanaRegistro.getTextNombre().getText(), this.ventanaRegistro.passwordToString(), 0);
 		List<String> nombresRegistrados = new ArrayList<String>();
 
 		List<String> registrados = new ArrayList<String>();
@@ -586,8 +587,16 @@ public class Controlador {
 	}
 
 	private void mostrarReporte(ActionEvent r) {
-		ReporteAgenda reporte = new ReporteAgenda(agenda.obtenerTodasLasPersonas());
-		reporte.mostrar();
+		ReporteAgenda reporte;
+		try {
+			reporte = new ReporteAgenda(agenda.obtenerTodasLasPersonas());
+			reporte.mostrar();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
 	}
 
 	private void borrarPersona(ActionEvent s) {
@@ -649,7 +658,7 @@ public class Controlador {
 	private void iniciarSesion(ActionEvent i) {
 		;
 		RegistrarPersonaDTO posibleUsuario = new RegistrarPersonaDTO(this.ventanaLogin.getTextNombre().getText(),
-				this.ventanaLogin.getTextPassword().getText());
+				this.ventanaLogin.getTextPassword().getText(), 0);
 		Map<String, String> nombresRegistrados = new TreeMap<String, String>();
 
 		List<String> usuarios = new ArrayList<String>();
@@ -670,6 +679,8 @@ public class Controlador {
 
 		} else if (nombresRegistrados.containsKey(posibleUsuario.getNombre())
 				&& nombresRegistrados.containsValue(posibleUsuario.getPassword())) {
+
+			this.registrar.update(posibleUsuario);
 
 			this.inicializarAll();
 
@@ -726,6 +737,7 @@ public class Controlador {
 
 	private void obtenerTiposDeContacto() {
 		this.ventanaPersona.getDefaultComboBoxModelValue().removeAllElements();
+		this.ventanaPersona.getDefaultComboBoxModelValue().addElement(null);
 		this.ventanaPersona.getDefaultComboBoxModelValue().addAll(tipoContacto.obtenerTodosLosTiposContactos());
 	}
 
@@ -884,8 +896,15 @@ public class Controlador {
 	}
 
 	public void inicializar() {
-		this.ventanaLogin.ponerTitulo();
-		this.ventanaLogin.mostrarVentanaLogin();
+		
+		
+		if (!this.registrar.obtenerTodosLosRegistrados().isEmpty() && this.registrar.obtenerTodosLosRegistrados().get(0).getActivo() == 1) {
+			this.inicializarAll();
+		} else {
+
+			this.ventanaLogin.ponerTitulo();
+			this.ventanaLogin.mostrarVentanaLogin();
+		}
 	}
 
 	public void inicializarAll() {

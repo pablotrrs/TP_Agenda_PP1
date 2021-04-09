@@ -75,7 +75,7 @@ public class VentanaLogin extends JFrame{
 		
 		JLabel lblvista = new JLabel("Iniciar Sesi\u00F3n");
 		lblvista.setFont(new Font("Yu Gothic Light", Font.PLAIN, 19));
-		lblvista.setBounds(90, 23, 111, 37);
+		lblvista.setBounds(90, 23, 160, 37);
 		contentPane.add(lblvista);
 		
 		btnIngresar = new JButton("Ingresar");

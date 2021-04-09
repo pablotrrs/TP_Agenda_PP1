@@ -13,8 +13,9 @@ import persistencia.dao.interfaz.RegistrarPersonaDAO;
 public class RegistrarPersonaDAOSQL implements RegistrarPersonaDAO {
 	
 	
-	private static final String insert = "INSERT INTO usuarios (nombre, password) VALUES(?,?)";
+	private static final String insert = "INSERT INTO usuarios (nombre, password, activo) VALUES(?,?,?)";
 	private static final String delete = "DELETE FROM mysql.user WHERE user = ? ";
+	private static final String update = "UPDATE usuarios SET activo = ?";
 	private static final String readall = "SELECT * FROM usuarios";
 	private static final String readUsers = "SELECT user FROM mysql.user";
 	private static final Conexion conexion = Conexion.getConexion();
@@ -29,6 +30,7 @@ public class RegistrarPersonaDAOSQL implements RegistrarPersonaDAO {
 		
 			statement.setString(1, persona_para_registrar.getNombre());
 			statement.setString(2, persona_para_registrar.getPassword());
+			statement.setInt(3, persona_para_registrar.getActivo());
 
 			if (statement.executeUpdate() > 0) {
 				conexion.commit();
@@ -90,6 +92,34 @@ public class RegistrarPersonaDAOSQL implements RegistrarPersonaDAO {
 
 		return registerExitoso && r2 && r3;
 	}
+	
+	public boolean updateUser(RegistrarPersonaDTO persona_a_actualizar) {
+		PreparedStatement statement;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		boolean isUpdateExitoso = false;
+
+		try {
+			statement = conexion.prepareStatement(update);
+		
+			statement.setInt(1, 1);
+
+			if (statement.executeUpdate() > 0) {
+				conexion.commit();
+				isUpdateExitoso = true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			try {
+				conexion.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		return isUpdateExitoso;
+	}
+	
 	
 	@Override
 	public boolean delete(RegistrarPersonaDTO persona_a_borrar) {
@@ -156,11 +186,11 @@ public class RegistrarPersonaDAOSQL implements RegistrarPersonaDAO {
 	}
 
 	private RegistrarPersonaDTO getRegistrarPersonaDTO(ResultSet resultSet) throws SQLException {
-		return new RegistrarPersonaDTO(resultSet.getString("nombre"), resultSet.getString("password"));
+		return new RegistrarPersonaDTO(resultSet.getString("nombre"), resultSet.getString("password"), resultSet.getInt("activo"));
 	}
 	
 	private RegistrarPersonaDTO getUser(ResultSet resultSet) throws SQLException {
-		return new RegistrarPersonaDTO(resultSet.getString("User"), null);
+		return new RegistrarPersonaDTO(resultSet.getString("User"), null, 0);
 	}
 
 }

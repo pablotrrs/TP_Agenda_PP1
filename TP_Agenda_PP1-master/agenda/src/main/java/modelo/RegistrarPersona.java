@@ -20,6 +20,9 @@ public class RegistrarPersona {
 	public boolean crearUsuario(RegistrarPersonaDTO nuevoRegistro) {
 		return this.registrarPersona.CrearUsuario(nuevoRegistro);
 	}
+	public boolean update(RegistrarPersonaDTO actualizar) {
+		return this.registrarPersona.updateUser(actualizar);
+	}
 
 	public List<RegistrarPersonaDTO> obtenerTodosLosRegistrados() {
 		return this.registrarPersona.readAll();
