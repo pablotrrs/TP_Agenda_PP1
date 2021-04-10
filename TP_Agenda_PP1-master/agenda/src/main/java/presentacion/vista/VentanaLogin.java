@@ -25,6 +25,7 @@ public class VentanaLogin extends JFrame{
 	private JButton btnIngresar;
 	private JPasswordField textPassword;
 	private JButton btnRegistrarse;
+	private JLabel mensaje;
 	
 	public static VentanaLogin getInstance() {
 		if (INSTANCE == null) {
@@ -94,15 +95,19 @@ public class VentanaLogin extends JFrame{
 		btnRegistrarse.setBounds(90, 282, 111, 23);
 		contentPane.add(btnRegistrarse);
 		
-		JLabel lblNewLabel = new JLabel("\u00BFNo tienes usuario? ");
-		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblNewLabel.setBounds(100, 257, 101, 14);
-		contentPane.add(lblNewLabel);
+		mensaje = new JLabel("\u00BFNo tienes usuario? ");
+		mensaje.setFont(new Font("Arial", Font.PLAIN, 11));
+		mensaje.setBounds(100, 257, 101, 14);
+		contentPane.add(mensaje);
 		
 		this.setVisible(false);
 	
 	}
-
+	
+	public void DesactivarMensaje() {
+		
+		this.mensaje.setText("");
+	}
 	public JTextField getTextNombre() {
 		return textNombre;
 	}
@@ -121,6 +126,13 @@ public class VentanaLogin extends JFrame{
 
 	public JTextField getTextPassword() {
 		return textPassword;
+	}
+	public void ActivarButton(JButton btn) {
+		btn.setVisible(true);
+	}
+
+	public void ApagarButton(JButton btn) {
+		btn.setVisible(false);
 	}
 
 	public void setTextPassword(JPasswordField textPassword) {
@@ -142,10 +154,13 @@ public class VentanaLogin extends JFrame{
 		textPassword.setText("");
 	}
 	public void mensajeError() {
-		JOptionPane.showMessageDialog(this, "El usuario ingresado no esta registrado.");
+		JOptionPane.showMessageDialog(this, "El usuario y/o contraseña son incorrectos.");
 	} 
 
 	public void mostrarVentanaLogin() {
 		this.setVisible(true);
+	}
+	public void cambiarDimension() {
+		this.setBounds(100, 100, 289, 275);
 	}
 }

@@ -104,6 +104,13 @@ public class VentanaRegistro extends JFrame {
 	public void mostrarVentanaRegistro() {
 		this.setVisible(true);
 	}
+	public void ActivarButton(JButton btn) {
+		btn.setVisible(true);
+	}
+
+	public void ApagarButton(JButton btn) {
+		btn.setVisible(false);
+	}
 	public void mostrarMensaje() {
 		JOptionPane.showMessageDialog(this, "Registro exitoso.");
 	}

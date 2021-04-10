@@ -16,7 +16,7 @@ public class RunningScripts {
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 			// Getting the connection
 			String mysqlUrl = "jdbc:mysql://localhost:3306";
-			Connection con = DriverManager.getConnection(mysqlUrl, "root", "");
+			Connection con = DriverManager.getConnection(mysqlUrl, "root", "root");
 			System.out.println("Connection established......");
 			// Initialize the script runner
 			ScriptRunner sr = new ScriptRunner(con);

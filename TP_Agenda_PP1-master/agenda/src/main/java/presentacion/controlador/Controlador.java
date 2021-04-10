@@ -112,14 +112,25 @@ public class Controlador {
 	}
 
 	private void ventanaRegistrar(ActionEvent b) {
-		this.ventanaLogin.cerrar();
-		this.inicializarRegistro();
-		this.ventanaRegistro.ponerTitulo();
-		this.ventanaRegistro.vaciarCamposRegistro();
+
+		if (this.registrar.obtenerTodosLosRegistrados().size() == 0) {
+			this.ventanaLogin.cerrar();
+			this.inicializarRegistro();
+			this.ventanaRegistro.ponerTitulo();
+			this.ventanaRegistro.vaciarCamposRegistro();
+
+		}
+
 
 	}
 
 	private void mostrarVentanaLogin(ActionEvent a) {
+		
+		if(this.registrar.obtenerTodosLosRegistrados().size() == 1) {
+			this.ventanaLogin.ApagarButton(this.ventanaLogin.getBtnRegistrarse());
+			 this.ventanaLogin.DesactivarMensaje();
+		}
+		
 		this.ventanaRegistro.cerrar();
 		this.ventanaLogin.vaciarCamposLogin();
 		this.ventanaLogin.mostrarVentanaLogin();
@@ -557,6 +568,8 @@ public class Controlador {
 		List<String> nombresRegistrados = new ArrayList<String>();
 
 		List<String> registrados = new ArrayList<String>();
+		
+		
 		for (RegistrarPersonaDTO rs : this.registrar.obtenerTodosLosUsers()) {
 			registrados.add(rs.getNombre());
 
@@ -573,6 +586,11 @@ public class Controlador {
 				this.registrar.crearUsuario(persona_a_registrar);
 				this.ventanaRegistro.mostrarMensaje();
 				this.ventanaRegistro.cerrar();
+				if(this.registrar.obtenerTodosLosRegistrados().size() >= 1) {
+					this.ventanaLogin.ApagarButton(this.ventanaLogin.getBtnRegistrarse());
+					 this.ventanaLogin.DesactivarMensaje();
+					 this.ventanaLogin.cambiarDimension();
+				}
 				this.ventanaLogin.mostrarVentanaLogin();
 			}
 
@@ -580,6 +598,7 @@ public class Controlador {
 			this.ventanaRegistro.mensajeError();
 			if (!nombresRegistrados.contains(persona_a_registrar.getNombre().toLowerCase())) {
 				this.registrar.agregarPersonaRegistrada(persona_a_registrar);
+
 			}
 
 		}
@@ -897,9 +916,16 @@ public class Controlador {
 
 	public void inicializar() {
 		
-		
-		if (!this.registrar.obtenerTodosLosRegistrados().isEmpty() && this.registrar.obtenerTodosLosRegistrados().get(0).getActivo() == 1) {
+		if(this.registrar.obtenerTodosLosRegistrados().size() >= 1) {
+			this.ventanaLogin.ApagarButton(this.ventanaLogin.getBtnRegistrarse());
+			 this.ventanaLogin.DesactivarMensaje();
+			 this.ventanaLogin.cambiarDimension();
+		}
+
+		if (!this.registrar.obtenerTodosLosRegistrados().isEmpty()
+				&& this.registrar.obtenerTodosLosRegistrados().get(0).getActivo() == 1) {
 			this.inicializarAll();
+			 
 		} else {
 
 			this.ventanaLogin.ponerTitulo();

@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `localidad` (
   `codigoPostal` varchar(45) NOT NULL,
   `idProvincia` int(11) NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
-   PRIMARY KEY (`codigoPostal`, `nombre`),
+   UNIQUE (`codigoPostal`, `nombre`),
    FOREIGN KEY (`idProvincia`) REFERENCES `provincias`(`idProvincia`)
 ); 
 
